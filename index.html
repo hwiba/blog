@@ -81,10 +81,10 @@
   <div class="post-content">
     <header>
       
-      <time datetime="2015-10-15T09:24:59.000Z"><a href="/blog/2015/10/15/Java-7-null-check-하기/">Thu, Oct 15 2015, 6:24:59 pm</a></time>
+      <time datetime="2015-10-15T10:37:41.000Z"><a href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-프론트엔드개발-그럴-수-있지/">Thu, Oct 15 2015, 7:37:41 pm</a></time>
 
   
-    <h1 class="title"><a href="/blog/2015/10/15/Java-7-null-check-하기/">Java 7, null check 하기</a></h1>
+    <h1 class="title"><a href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-프론트엔드개발-그럴-수-있지/">Next 웹 프론트엔드 세미나, 프론트엔드개발, 그럴 수 있지.</a></h1>
   
 
 
@@ -92,7 +92,7 @@
   
   <div class="tags">
   	<i class="fa fa-tag"></i>
-    <a href="/blog/tags/Java/">Java</a>, <a href="/blog/tags/Java-7/">Java 7</a>, <a href="/blog/tags/Java-8/">Java 8</a>, <a href="/blog/tags/nullCheck/">nullCheck</a>, <a href="/blog/tags/requireNonNull/">requireNonNull</a>
+    <a href="/blog/tags/세미나/">세미나</a>, <a href="/blog/tags/웹/">웹</a>, <a href="/blog/tags/프론트엔드/">프론트엔드</a>
   </div>
 
 <div class="clear"></div>
@@ -100,25 +100,47 @@
     </header>
     <div class="entry">
       
-        <p>Java 7에서 추가된 <code>Objects</code>의 <code>requireNonNull(T t)</code> 메서드는 파라미터의 null 체크를 위한 메서드로 null을 어떻게든 해보려는 목적에서 Java 8의 Optional과 비슷한 면이 있지만 그 처리는 상당한 차이가 있다. 이번 post에선 <code>requireNonNull</code>에 대해 다룬다.</p>
-<p>메서드에서 null일 가능성이 있는 인자가 있을 때, 이를 메서드 시작 지점에서 체크하여 Exception을 던지고자 하는 경우 다음과 비슷한 코드를 종종 볼 수 있다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nullableParameterMethod</span> <span class="params">(Object object)</span> <span class="keyword">throws</span> NullPointerException </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> ( <span class="keyword">null</span> == object ) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">  &#125;</span><br><span class="line">  System.out.println(String.valueOf(object));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>잘 동작할 것처럼 보이는데 이것에서 더 개선할 점이 있을까? <code>Objects.requireNonNull</code>은 이 코드를 더 편하게 사용하는 것을 목표로 한다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nullableParameterMethod2</span> <span class="params">(Object object)</span> </span>&#123;</span><br><span class="line">  object = Objects.requireNonNull(object);</span><br><span class="line">  System.out.println(String.valueOf(object));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>Objects.requireNonNull(T t)</code>은 인자 t가 null이 아니면 인자 t를 리턴하고 null이라면 내부에서 NullPointerException을 호출하는 메서드다. 이 정도로는 뭐가 개선된 건지 알기 어렵다. 코드가 아주 약간 줄어들기는 했지만 그게 그렇게 중요할까? 물론 의미는 있다. 메서드를 이해하고 있다면 가독성의 증가라고 생각해볼 수 있을 것이다. 그리 썩 대단해보이지는 않지만 null 체크만이 아니라 다양한 상태 체크가 있다면 좀 도움이 되지 않을까?</p>
-<p>같은 이름의 <code>Objects.requireNonNull(T t, String message)</code> 메서드는 예외 상황에 대해 메시지를 추가해준다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nullableParameterMethod3</span> <span class="params">(Object object)</span> </span>&#123;</span><br><span class="line">  object = Objects.requireNonNull(object, <span class="string">"object가 null입니다."</span>);</span><br><span class="line">  System.out.println(String.valueOf(object));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>여기까지도 뭐 그냥저냥인 것 같다. 그런데 Java 8에 오면서 lambda 식이 생김으로서 하나의 메서드가 더 생겼다. <code>Objects.requireNonNull(T t, Supplier&lt;String&gt; messageSupplier)</code>다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nullableParameterMethod4</span> <span class="params">(Object object)</span> </span>&#123;</span><br><span class="line">  object = Objects.requireNonNull(object, () -&gt; <span class="string">"object가 null입니다."</span>);</span><br><span class="line">  System.out.println(String.valueOf(object));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>Supplier&lt;T&gt;</code>는 無인자 單 리턴의 Functional Interface로서 매우 Lazy 하고 싶을 때 쓰기 좋다. return이 String이기만 하다면 그 안에서 여러가지를 할 수 있으므로 검사 대상인 객체가 null일 때 Exception을 던지는 것 말고도 여러가지 작업을 추가할 수 있을 것이다. 그런데 여전히 <code>if (null == object) {...}</code>에 비해 아주 대단해 보이지는 않는다. 좀 나은 정도? 불필요한 코드 라인 수를 줄이는데 도움이 될 것이다.</p>
-<p>다음 post에서는 <code>Optional&lt;T&gt;</code>에 대해 알아볼 것이다.</p>
+        <p>스피커 : 쿠팡 최선진 풀스택 웹 개발자</p>
+<ul>
+<li><strong>프론트엔드?</strong> 크게 나누면<ul>
+<li>UI Component</li>
+<li>Ajax UI</li>
+<li>Markup</li>
+<li>UI interaction</li>
+<li>UX prototype</li>
+</ul>
+</li>
+<li>쿠팡도 이런 거 거의 한 사람이 다합니다…</li>
+<li>하늘 같은 User님, 기획자 Product Owner, UX Designer, Back-end Developer 이들이 생각하는 프론트엔드 개발자의 역할은 다르다. 그래서 요구 사항이 다르다..</li>
+<li><strong>이슈들?</strong> Valicate JSON Data, Cross Domain, Image sprite, Web Accessilility(웹 접근성), CSS methodology(css 방법론은 전역에서 버튼 같은 클래스를 선언하면 헬이 될 수 있다. 네이밍 어떻게 할 거야?), Bug &amp; Sustaining Task, Search Engine Opimisation(SEO, 재밌지만 코드라기 보다는 url이나 meta tag 등을 잘하는 거), Cross Browsing, Resolution(retina를 대응하면서 발생했던 문제인데 이미지 스프라이트, 크로스브라우징과 겹쳐서 힘들다.. IE 8의 헬), Page Load, etc….</li>
+<li>NEXT에서 공부하던 거랑 괴리감을 느낀 것이, NEXT에서 최신 기술로 클린한 노력을 하는 것과 비교해서 실전은 더러웠다. 역시 크로스 브라우징이 문제.</li>
+<li><strong>도구들?</strong> google analytics, LESS, karma, JS library, SASS, HandleBar helper, SEO-Guide, JSON beautifuler, chrome Extension(만들기 쉬워서 종종 만들어서 쓰기도 한다.), Qunit, Browser Stack -&gt; 유료 도구들 살 때 디자인 비용으로 사게 되더라..</li>
+<li><strong>그러나?</strong><ul>
+<li>filter 기능을 만들고 적용하기 버튼을 만들었더니, 유저 테스트를 했더니 <strong>AND</strong> 연산이 아니라 <strong>OR</strong> 연산이라고 생각하는 User 님 등 제대로 이해 못하는 사용이 있었다. 아마존을 참고하는 등 여러 과정을 통해 적용하기 버튼을 없애는 등 작업을 하고 등등 작업 중.</li>
+<li>이런 걸 하다보면, <strong>뭐가 더 옳은 지 모르게 된다.</strong> 어차피 기능 자체는 우리들(NEXT)에서 못하는 사람은 없는데 뭘 만들어야 되는 건지 알기 어려웠다.</li>
+<li><strong>User Test, AB Test</strong>가 악용되는 케이스가 있기는 하지만 이것이 그나마 객관적으로 무엇이 더 좋은지 평가하는데 도움이 되었다.</li>
+<li>모바일에 플랫 디자인을 적용해서 유려하게 만들었는데 오히려 역효과… 유저에 대한 타겟팅을 분명히 하자.</li>
+</ul>
+</li>
+<li><strong>어디로 향할 것인가?</strong><ul>
+<li>자신만의 오답노트 - 깃헙&amp;지킬 등 블로그 같은게 좋더라.</li>
+<li>부딪혀보기 - 백그라운드 사이즈가 IE에서 안먹은 적이 있다. 레티나 이미지 적용하다 쿠팡 로고가 엄청 크게 나온 적이… react나 앵귤러 같은 건 회사에서 쓰기 어려운 면이 있기는 하다. 뭐가 더 좋은 지 회사 내에서도 말이 많고. 그래도 쓸 수 있다. 도전해보는게 의미가 있다. 링크드인에 둘 다 적을 수 있게 되는 거 좋다! 영어로 메일이 오더라.</li>
+<li>속도가 전부가 아니다 - 되게만 하는 건 쉽지만 코드를 뒤집고, 요구사항이 바뀌고, 이걸 급급하게 따라가기만 하면 나중에 내가 뭘 하고 있는 지 모르게된다. 그럼에도 빨리하라는 요구가 들어오지만..</li>
+<li>라이브러리化 - 코드를 요구사항이 생겨서 만들 때 나만의 라이브러리를 만들어서 유연하게 쓸 수 있도록 하는 것이 요구사항을 대하는데 유용했다. 미묘한 사이즈 조절이나 이벤트 시간 등… 조절 가능하도록.</li>
+</ul>
+</li>
+</ul>
+<h1 id="질문">질문</h1><ul>
+<li>쿠팡에서 쓰는 AB로 쓰는 건? GA뿐? -&gt; 그거 말고 여러가지… (잘 못알아들음)</li>
+<li>테스트는 혼자 하는지, 팀이 하는지 -&gt; 쿠팡은 QA가 따로 없어서 팀마다 카르마, Qunit 등 쓰기는 하지만 알다시피 프론트는 테스트가 쉽지 않다. 각자 어떻게든.</li>
+</ul>
 
       
     </div>
     <footer>
       
         <div class="alignleft">
-            <a href="/blog/2015/10/15/Java-7-null-check-하기/#more" class="more-link"><i class="fa fa-chevron-right"></i>Read More</a>
+            <a href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-프론트엔드개발-그럴-수-있지/#more" class="more-link"><i class="fa fa-chevron-right"></i>Read More</a>
         </div>
         
         
@@ -148,10 +170,10 @@
   <div class="post-content">
     <header>
       
-      <time datetime="2015-10-12T08:03:28.000Z"><a href="/blog/2015/10/12/Java-8-Functional-Interface-Nominal-typing/">Mon, Oct 12 2015, 5:03:28 pm</a></time>
+      <time datetime="2015-10-15T10:36:28.000Z"><a href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-작은-회사에서-개자이너로-일하기/">Thu, Oct 15 2015, 7:36:28 pm</a></time>
 
   
-    <h1 class="title"><a href="/blog/2015/10/12/Java-8-Functional-Interface-Nominal-typing/">Java 8, Functional Interface - Nominal typing</a></h1>
+    <h1 class="title"><a href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-작은-회사에서-개자이너로-일하기/">Next 웹 프론트엔드 세미나, 작은 회사에서 개자이너로 일하기.</a></h1>
   
 
 
@@ -159,7 +181,7 @@
   
   <div class="tags">
   	<i class="fa fa-tag"></i>
-    <a href="/blog/tags/Java/">Java</a>, <a href="/blog/tags/Java8/">Java8</a>, <a href="/blog/tags/functional-interface/">functional interface</a>, <a href="/blog/tags/nominal-typing/">nominal typing</a>
+    <a href="/blog/tags/세미나/">세미나</a>, <a href="/blog/tags/웹/">웹</a>, <a href="/blog/tags/프론트엔드/">프론트엔드</a>
   </div>
 
 <div class="clear"></div>
@@ -167,34 +189,60 @@
     </header>
     <div class="entry">
       
-        <p>Java 8은 Functional한 코드 스타일을 지원하기 위해 Functional Interface와 Stream API, method reference 등을 추가했다. 이번 포스팅은 <strong>Functional Interface</strong>에 대해 다룬다.</p>
-<h1 id="정의">정의</h1><p>일반적으로 함수형을 지원하는 프로그래밍 언어에서는 <strong>함수(function)가 <em>1st-class citizen</em>이다.</strong> 이것은 함수가 함수의 파라미터로 전달 될 수 있으며, 함수가 반환값일 수 있고, 데이터로서 다루어질 수 있음을 의미한다. <em>1st-class citizen</em>의 조건에 대해서는 보다 심도 있는 논의가 있지만 이 정도로만 생각하고 넘어가는 것이 일반적인 것 같다. 더 자세한 내용은 <a href="https://mitpress.mit.edu/sicp/full-text/book/book-Z-H-12.html" target="_blank" rel="external">sicp의 First class 정의</a> 등을 참고하자.</p>
-<h3 id="First_Class_Elements">First Class Elements</h3><ul>
-<li>They may be named by variables.</li>
-<li>They may be passed as arguments to procedures.</li>
-<li>They may be returned as the results of procedures.</li>
-<li>They may be included in data structures.</li>
+        <p>스피커 : 퇴사자 김중일(NEXT 2기 재학 중)</p>
+<ul>
+<li>소기업에서 개자이너(개발자 + 디자이너)로 일한 경험을 공유하고자.</li>
+<li>Original Wave 라는 디자인 에이전시에서 일했다.</li>
+<li>디자이너를 채용한다고 해서 갔는데, 개발자도 하게 되었다..</li>
 </ul>
-<h1 id="Structural_Type_System_VS-_Nominal_Type_System">Structural Type System VS. Nominal Type System</h1><p>다시 Functional Interface로 돌아가서, Functional Interface는 말 그대로 Interface다. 다른 Interface와의 차이점은 이것이 함수형을 지원하기 위한 용도로 쓰기 위해 특별히 <code>@FunctionalInterface</code>라는 annotation을 달았다는 점이다. 이것은 해당 Interface가 단 하나의 abstract method를 가졌는지 체크해준다. 따라서 이 annotation이 없더라도 조건만 맞는다면 Functional Interface의 목적으로 쓰일 수 있다. 단 하나의 abstract method라고 제한하는 것은 Functional Interface가 Java 8의 Lambda expression의 Interface가 될 수 있도록 한다. 또한 abstract method만 제한되었기 때문에 Interface의 static method와 default method는 제한되지 않는다. 여기까지는 좋다. 그런데 이게 왜 필요할까?</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SampleFunctionalInterface</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">method3</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">method4</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>scala나 kotlin 등의 언어들은 구조적인 함수 타입(Structural type system)을 허용한다. 바로 예제를 보자.</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// scala 예제</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">structuralTypeSystemMethod</span> (</span><span class="type">A</span> : <span class="type">Int</span> =&gt; <span class="type">Int</span>) : <span class="type">Int</span> =&gt; <span class="type">Int</span> = <span class="type">A</span></span><br></pre></td></tr></table></figure>
-<p>내 생각에는 무척 이해하기 쉬운 표기 같다. 이를 그대로 Java적으로 표현하면 어떻게 될까?</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 경고 : 이러한 문법은 Java 8에서는 쓸 수 없습니다. 단순한 예시.</span></span><br><span class="line">Integer -&gt; <span class="function">Integer <span class="title">structuralTypeSystemMethod</span> <span class="params">(Integer -&gt; Integer A)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> A;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>:</code> 기호가 빠지면서 약간 난해해지기는 했지만 아직 괜찮은 것 같다. 이해하기 나쁘지 않다. Integer를 받아서 Integer를 리턴하는 함수를 받아서 Integer를 받아서 Integer를 리턴하는 함수를 리턴한다. IDE가 syntax color만 잘 분류해주면 문제가 없어보인다.(정말?)</p>
-<p>그러나 불행하게도 이 문법은 Java에서는 아직 실제로 사용할 수 없다. 아직이라고는 했지만 영영 사용하지 못할 수도 있다. 그럼 진짜 Java는 어떻게 이 함수를 표현할까?</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Function&lt;Integer, Integer&gt; nominalTypeSystemMethod (Function&lt;Integer, Integer&gt; A) &#123;</span><br><span class="line">  <span class="keyword">return</span> A;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>이제 <code>Function&lt;T, R&gt;</code> 이라는 새로운 Functional Interface를 배워야하게 생겼다. scala의 Structural type system에 비하면 매우 귀찮다. 이러한 표기 방식을 <strong>Nominal type system</strong>이라 한다. 더 정확하게 말하자면 Java는 원래부터 Nominal type system을 써왔고 function을 1st-class citizen으로 만들고자 고민하면서도 이것을 유지하는 방법을 선택한 것이다.</p>
-<p>Nominal type system은 프로그래밍에 쓰이는 타입 시스템에서 가장 대중적인 시스템일 것이다. 이는 어떤 데이터의 타입이 명시적 선언에 의해 결정되는 시스템이다. 그 이점은 하나의 타입이 다른 타입과 같은 지 다른 지, 혹은 하나의 타입이 다른 타입의 서브 타입인지 아닌지 구별하기에 용이하기에 비교적 더 <em>안전</em>할 수 있다. 올해로 20년이 된 Java는 많은 환경에서 이용되어 오고 있으며 타입 시스템의 변화는 하위 호환성에 큰 영향을 미칠 수 있기 때문에 Lambda 식을 넣으면서도 타입 시스템을 유지한 보수적인 선택으로 생각된다.</p>
-<p>어쨌든 덕분에 기억해둬야 할 Functional Interface가 꽤 많다. T 타입을 인자로 받아서 R 타입을 반환하는 <code>Function&lt;T, R&gt;</code>, 인자도 없고 반환도 없는 <code>Runnable</code>, 인자가 없이 T 타입을 반환하는 <code>Supplier&lt;T&gt;</code>, T 타입 인자를 받아서 반환을 하지 않는 <code>Consumer&lt;T&gt;</code> 같이 제네릭 함수 타입부터 int, long, double, boolean 등에 특화된 <code>IntPredicate</code>나 <code>LongFunction&lt;R&gt;</code> 같은 것들까지 수십 여종이다(대충 세어보기로는 43종을 발견했다.. 개인이 만들 수도 있기 때문에 당연하게도 얼마든지 늘어날 수 있다). 심지어 이들이 가진 abstract method의 이름도 다르다(…!, 물론 IDE가 우리를 구원하리라).</p>
-<p>그럼에도 불구하고 이들 Functional Interface를 배우고 써야하는 것은 이들이 가진 목적성에 특화된 default method들의 유용성과 고차 함수의 유용성이 포기하기 쉽지 않기 때문이다.</p>
+<h1 id="개자이너">개자이너</h1><p>개발자 + 디자이너라는 단순한 것으로 표현할 수 없다. 작은 기업에서는 일러스트레이터, 로고디자인, 웹 백엔드, 웹 프론트엔드 등 일은 많은데 인력은 없다.</p>
+<p>입사 전 커버 가능한 영역</p>
+<ul>
+<li>프론트엔드 html, css, js, jquery 등</li>
+<li>일러스트레이터, 포토샵, 아이패드 원화 디자인 등 디자인 능력</li>
+<li>node.js, db, 기타 등등…</li>
+</ul>
+<p>회사가 기대한 영역</p>
+<ul>
+<li>기획을 제외한 다?</li>
+</ul>
+<p>퇴사 즈음 갖추게 된 능력</p>
+<ul>
+<li>Wordpress를 이용한 개발</li>
+<li>node.js callback에 대한 뼈를 깎는 이해.</li>
+<li>각종 라이브러리를 적절히 끌어쓰는 능력</li>
+<li>css 실시간 웹 디자인</li>
+<li>적당히 거절하는 법.</li>
+<li><strong>크로스브라우징 (적정 기술에 대한 이해)</strong></li>
+</ul>
+<p>특히 크로스 브라우징이 가장 힘들었다. Next에서는 Mac + chrome으로 주로 공부했는데.. 상사와 유저는 Windows + IE 였다. ajax도 잘 안되는 경우도 많고…<br>그래서 가능한 기능들을 쳐내게 되었다.</p>
+<h1 id="왜_이렇게_되었을까?">왜 이렇게 되었을까?</h1><p>A. 오너의 입장.<br>    회사 규모가 작고… ……<br>    (내용이 많았는데 필기 실패)</p>
+<p>B. 기획자의 입장<br>    많이 싸웠다……. 말을 너무 잘함..<br>    (내용이 많았는데 필기 실패)</p>
+<h1 id="일이_너무_많다!">일이 너무 많다!</h1><p>그러나 대신 큰 그림을 그릴 수 있었다. 개발자와 디자이너의 커뮤니케이션 비용이 0이므로 지금 하고 있는 어떤 작은 일이 어떻게 큰 일에 영향을 미치고 도움이 되는지 인지할 수 있었고, 타인의 개입이 없다면 4배 이상의 생산 효율도 얻을 수 있는 경험이었다.</p>
+<h1 id="문제는_취향이다-">문제는 취향이다.</h1><p>인간은 모두 다르고, 각자의 미추 기준이 다르다. 어디에 맞춰야하나?<br>개발 속도가 너무 빠르면 너무 잦은 취향 변화에 의하여 모든 디자인소스 및 코드를 뒤집어야 하는 상황을 종종 연출한다.</p>
+<h1 id="작은_결론-">작은 결론.</h1><p><strong>일관된</strong> 철학이 없는 곳에서는 무리다. 자체 서비스가 필요할 수 밖에 없다.</p>
+<h1 id="실제_사례">실제 사례</h1><p>(필기 못함. 온갖 고통들, 개발을 이해 못하는 방해들)</p>
+<h1 id="결정적인_실무적_어려움-">결정적인 실무적 어려움.</h1><ul>
+<li>가장 어려운 것은 TEST다. 아이폰, 안드로이드(기기도 없었음), 사파리, 크롬, IE, 중국산 브라우저들(360 등)</li>
+<li>각종 인앱 브라우저, 특히 삼성 브라우저는 Hell이다!</li>
+<li>파편화 문제 : 세상에는 너무 많은 기기들과 너무 많은 화면 비례가 존재합니다. 절대- 다 못맞춥니다. 그런데, 해야합니다. 반응형? CSS로? 디자이너에게 엄청난 고통이다.</li>
+<li>가장 큰 문제는 단위다. 디자이너는 pt(point) 단위를 쓰고 개발자는 px(pixel) 단위를 쓰기 때문에 대화가 안된다. 그러나, 더 상위 단위가 있으니 무조건 %로 이야기 하기로 했다.</li>
+<li>항상 <strong>정사각형 디자인</strong>을 쓰기로 했다. 화면 회전 등 어딜가도 좋다.</li>
+<li>적절한 마진..? 패딩은 포기한다. 브라우저마다 값이 완전히 다르고 복잡도는 증가하고 디자이너와의 의사소통은 더욱 고통스러워진다.</li>
+<li>페이지 단위로 통합할 수 있지 않을까? <strong>반응형을 디자이너에게 제대로 이해하도록 만드는 건 엄청나게 무리다!</strong> 회사에서는 개발보다 디자인 이미지만 먼저 보여주기를 원하는데… 현 대학 교육 시스템 하의 디자이너는 정적인 디자인에 치중되어 있다. 포토샵으로 반응형…? 이해 시키는 건 어렵다.</li>
+</ul>
+<h1 id="질문">질문</h1><ul>
+<li>Q :px 단위로 가이드를 주려하는 디자이너가 있는데.. px 단위래봐야 브라우저마다 또 달라지고… 이해시키기 어렵다. 어떻게 해야하나? A : 퍼센트로 이야기하자.</li>
+<li>Q : 우리 회사는 퍼센트를 이해시키기도 포기했다. 픽셀로 이야기 받은 다음 개발자가 알아서 잘 계산해서 퍼센트로 보고 만든다..</li>
+<li>Q : 기획자를 믿고 따라가? A : 컨펌은 결국 대표가… 기획자만 믿으면 개발자 독박이다.</li>
+</ul>
 
       
     </div>
     <footer>
       
         <div class="alignleft">
-            <a href="/blog/2015/10/12/Java-8-Functional-Interface-Nominal-typing/#more" class="more-link"><i class="fa fa-chevron-right"></i>Read More</a>
+            <a href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-작은-회사에서-개자이너로-일하기/#more" class="more-link"><i class="fa fa-chevron-right"></i>Read More</a>
         </div>
         
         
@@ -224,10 +272,10 @@
   <div class="post-content">
     <header>
       
-      <time datetime="2015-10-07T13:30:04.000Z"><a href="/blog/2015/10/07/kotlin-세미나-필기/">Wed, Oct 7 2015, 10:30:04 pm</a></time>
+      <time datetime="2015-10-15T10:35:50.000Z"><a href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-그거-좀-쓰면-더-좋냐/">Thu, Oct 15 2015, 7:35:50 pm</a></time>
 
   
-    <h1 class="title"><a href="/blog/2015/10/07/kotlin-세미나-필기/">kotlin 세미나 필기</a></h1>
+    <h1 class="title"><a href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-그거-좀-쓰면-더-좋냐/">Next 웹 프론트엔드 세미나, 그거 좀 쓰면 더 좋냐?</a></h1>
   
 
 
@@ -235,7 +283,7 @@
   
   <div class="tags">
   	<i class="fa fa-tag"></i>
-    <a href="/blog/tags/kotlin/">kotlin</a>, <a href="/blog/tags/seminar/">seminar</a>
+    <a href="/blog/tags/세미나/">세미나</a>, <a href="/blog/tags/웹/">웹</a>, <a href="/blog/tags/프론트엔드/">프론트엔드</a>
   </div>
 
 <div class="clear"></div>
@@ -243,39 +291,63 @@
     </header>
     <div class="entry">
       
-        <blockquote>
-<p>경고 : 이 문서는 오타수정을 포함해 정리를 하지 않은 필기로 잘못 들었거나 잘못 이해했거나 기타 등등 잘못된 내용이 얼마든지 많이 포함되어 있을 수 있습니다.</p>
-</blockquote>
-<p>발표자 : 익명 처리함…</p>
+        <p>스피커 : SK planet 윤지수 마스터</p>
 <ul>
-<li>특기 사항 : 코틀린보다는 스칼라+스파크+제플린을 더 좋아함.</li>
-<li>안드로이드에서 잘 맞음.</li>
-<li>jvm에서 돌아가는 언어로서 자바와 호환됨.</li>
-<li>intellij에 to Kotlin 기능이 있음.</li>
-<li>정적 타입 언어.</li>
-<li>안드로이드는 공식적으로 java 6까지만 지원함.</li>
-<li>달빅 vm은 method 갯수 제한이 있다. 약 6.5만개. 큼직한 라이브러리, jodaTime, guava 등이 각각 1만개 근처이므로 큼직한 라이브러리 몇 개만 넣어도 뭘 할 수가 없다.</li>
-<li>스칼라를 안드로이드에서 쓰려는 시도도 있었지만 스칼라 자체가 거대한 라이브러리로(메서드 약 5만개) 구성되어 있어서 안드로이드에 직접 쓰기는 몹시 부담이 된다.</li>
-<li>때문에 간결하면서 유려하고 모던한 새 언어의 필요가 있어 코틀린이 탄생함.</li>
+<li>React, Flux, Gulp, ES6로 트렌디한 이야기를 해보겠다.</li>
+<li>이것들이 정말 필요한가? 필요한 시기인가? 이것에 대해 이야기 해보겠다.</li>
+<li>안써도 될 텐데… 이것들의 가치가 뭘까?</li>
 </ul>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data <span class="class"><span class="keyword">class</span> <span class="title">customer</span></span>(<span class="variable"><span class="keyword">val</span> name</span>: String, <span class="variable"><span class="keyword">val</span> email</span>: String, <span class="variable"><span class="keyword">val</span> company</span>: String)</span><br></pre></td></tr></table></figure>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">val</span> psitiveNumbers</span> = list.filter &#123; it &gt; <span class="number">0</span> &#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">object</span> ThisIsASingleton &#123;</span><br><span class="line">  <span class="variable"><span class="keyword">val</span> companyName</span> : String = “testname”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">var</span> output</span> : String</span><br><span class="line">output = <span class="literal">null</span> <span class="comment">// 코틀린의 타입은 래퍼이기 때문에 String type이면서 동시에 값이 null일 수 있다. ?와 !!로 제어 가능.</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">calculateTotal</span><span class="params">(obj: <span class="typename">Any</span>)</span> &#123;</span></span><br><span class="line">  <span class="keyword">if</span> (obj <span class="keyword">is</span> Invoice) &#123;</span><br><span class="line">    obj.calculateTotal()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//is 문은 타입 검사며, 이 문 안에서는 자동으로 타입 캐스팅 된다.</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>자바 라이브러리를 직접 사용할 수 있다.</li>
-<li>JavaScript. Write code in Kotlin and target JavaScript to run on Node.js or in browser(자바 스크립트로 컴파일 할 수 있다.)</li>
-<li>컴파일 속도가 가볍고 빠르기 때문에 스칼라와 달리 안드로이드에 매우 적합하지만 그만큼 기능은 적기 때문에 서버에서는 굳이 쓸 이유가 없다.</li>
-<li>안드로이드에서 코틀린을 쓸 때의 장점은 매우 많다. 람다도 쓸 수 있고, 클래스에 익스텐션을 만들 수 있고(기본 타입에 메서드를 추가할 수 있는 것을 의미)</li>
-<li>코틀린 런타입은 1071개, 표준 라이브러리는 약 5000개로 매우 가볍다.</li>
-<li>비트윈이 모든 코드를 코틀린으로 바꾸지는 않았다. 디펜던시 인젝션을 위한 apt, 버터나이프(코틀린 전용으로 래핑한 kotterKnife도 있음.) 라이브러리(스프링에서 어노테이션으로 인젝션 해주는 것 같이.)가 자바 라이브러리인데 어노테이션은 제대로 코틀린에 적용되지 않았다. 그러나 지금은 지원함. 따라서 올해 중에 완전 변환 할 것.</li>
-<li>menu : Menu?는 Menu를 Optional 타입으로 할 때.</li>
-<li>자바와 달리 코틀린은 이중 상속을 허용한다. 이 때문에 슈퍼의 것을 사용할 때 어떤 것인지 명시해주어야 할 때가 있어 toKotlin이 완전하지 않은 경우가 있다. 이외에는 별 문제 없음.</li>
-<li>코틀린 표준 라이브러리에서 array, list 등 자바에서 기본적으로 제공하는 라이브러리를 따로 가지고 있다. 자바 기본은 너무 오래되었고(..!), map, reduce 등을 쓰기 위해 표준 라이브러리에 추가함. 그런데 이게 인터페이스만 있고 구현은 빠져있다.</li>
-<li>스칼라는 방대한 컬렉션 라이브러리를 가지고 있지만 코틀린은 가볍게 하기 위해 컴파일 시 필요한 파트만 구현을 제너레이트 해서 집어넣는 방식으로 가볍게 한다.</li>
-<li>그런데 안드로이드 킷캣 이후로는 cpu를 더 쓰더라도 메모리를 적게 쓰기 위해 컬렉션 라이브러리 구현을 통합했다(? 난 잘 모름..). 이게 코틀린에서 어떻게 될 지, 잘 예측할 수 없다. 안드의 최신 컬렉션 라이브러리가 성능이 더 좋은 거 아닐까? 재밌는 주제. 그런데 자료형 구현의 성능이 그렇게 아주 큰 차이는 나지 않을 것으로 예상됨.</li>
-<li>성능은 자바보다 약 5% 정도 떨어진다. 이 정도 차이는 최적화로 따라잡기 쉽지 않은 차이긴 하지만, 생산성 증가가 워낙 높고, 파이썬 등과 비교하면 대단히 성능이 높기 때문에 충분히 괜찮은 정도라고 생각한다.</li>
-<li>js로 변환 가능, js(canvas)도. DOM 셀렉터, 크리에이터 등 DOM 관련 기능이 표준라이브러리에 포함되어 있다.</li>
+<h1 id="ES6">ES6</h1><ul>
+<li>새로운 feature와 syntax를 다룰 것.</li>
+<li>주요 feature<ul>
+<li>arrows : var pairs = evens.map(v =&gt; ({even :…)) <strong>왠 화살표냐..</strong></li>
+<li>let : C와 같이 block scope로 선언. <strong>굳이 필요한가..?</strong></li>
+<li>classes : java 프렌들리한 키워드들. class, extends, constructor, super, get 등.. <strong>function constructor &amp; prototype, typescript 정도..?</strong></li>
+<li>module : export, import <strong>requireJs &amp; browserify &amp; webpack</strong></li>
+<li>modules loader : System.import().then(function(m) { … } <strong>system.js</strong></li>
+<li>Promises : .then 으로 이어가서 콜백을 잇도록.. <strong>브라우저에서는 견딜만한 중첩콜백, promise 라이브러리가 따로 있기도 하고.. 브라우저에서는 굳이 많이 쓸까..? node에서 음.</strong></li>
+<li>yield, <em> : function</em> generator(i) { yield i + 1l yield* anotherGenerator(i); }, 이것은 함수 내부에서 멈추고 외부에서 실행을 제어할 수 있다. <strong>oh..? 브라우저에서 애니메이션을 제어할만할 것 같은데…</strong></li>
+</ul>
+</li>
+<li>ES 6는 웹의 혁신이 아니라 자연스러운 진화라고 본다.</li>
+<li>BABEL 등 transpiler는 ES6 -&gt; ES5로 변환하는 역할을 수행하므로 대부분의 브라우저에서 호환될 수 있다.<ul>
+<li>Babel 은 가벼운 웹 애플리케이션에서는 필요 없다. transpiler는 비교적 무거울 수 있다.</li>
+<li>classes, module, mouler loader 등이 필요한 무거운 웹 앱일 때 ES6를 사용하여 개발할 때 매력이 있다.</li>
+</ul>
+</li>
+</ul>
+<h1 id="React">React</h1><ul>
+<li>view에 집중하는 framework</li>
+<li>UI 개발은 무엇인가? 결국 View 개발이다. jsp, thymeleaf 등 결국 뷰를 조작하기 위함이다. 그런데 왜 UI 개발에 MVC가 필요한가? data가 중요하다보니 Model이 의미를 가지게 되었고, Controller로 View와 Model을 이어주는 역할이 덩달아 필요해졌다.</li>
+<li>그러니까 data의 유지가 필요 없다면, 프레임워크를 쓸 필요가 없다. 이들은 무겁고 느리다. 신중하게 판단해야한다.</li>
+<li>싱글 페이지 웹앱을 만들어 웹을 앱처럼 만들려다보니 네트워크가 끊겨도 동작, 캐시, 브라우저 메모리 등 여러 요구가 있었고 그래서 프론트의 MVC 프레임워크가 있는데….</li>
+<li><strong>React</strong>는 View에만 집중한다.</li>
+<li>virtual DOM 방식으로 DOM 조작 성능이 우수하다. <strong>react diif algorithm</strong></li>
+<li>더 이상 DOM 조작에 집중하지 말라. 이게 렌더링 성능을 악화시킨다. jQuery는 DOM API를 추상화해서 개발 절차를 편리하게 하지만, DOM 조작 자체에 집중하지 않는 시대로 가고 있다. 그래서 jQuery의 시대에 한 걸음 더 가까이 가고 있다.</li>
+<li>결국 트렌드는 jQuery와 같이 full package js library를 활용하는 추세에서, 언제든 제거할 수 있는 지금 당장 필요한 작은 polyfill과 utillity 라이브러리 활용으로 변화하고 있다.</li>
+</ul>
+<h2 id="flux">flux</h2><ul>
+<li>react를 쓰는데 data가 필요해지면….? 결국 Model(store)이 필요해졌다. </li>
+<li>데이터 흐름을 단방향으로 처리. <strong>uni-directional data flow</strong> 이는 각 레이어가 서로 간의 참조하는 것을 단방향으로 만든다.</li>
+</ul>
+<h2 id="react의_의미_있는_장점-">react의 의미 있는 장점.</h2><ul>
+<li>google은 자기들이 만들어 놓고 잘 안쓴다.. 하지만 facebook은 React를 쓴다.</li>
+<li>SPA(싱글 페이지 웹 앱)만을 위한 것이 아니다.</li>
+<li>vanillaJS(순수 자바스크립트) 방식과의 조화가 가능하다.</li>
+<li>Isomorphic JavaScript</li>
+</ul>
+<h1 id="직접_M,V,C_아키텍쳐를_디자인하고_라이브러리를_만들면_안될까?">직접 M,V,C 아키텍쳐를 디자인하고 라이브러리를 만들면 안될까?</h1><ul>
+<li>View의 의존성을 끊고 모듈화를 하자. View 간의 관계를 끊는게 몹시 중요하다.</li>
+<li>팀 내 개발자 간의 지식 공유가 안되면 유지하기 어려울 수 있다.</li>
+<li>flux와 같은 framework가 필요할까? SPA 수준의 웹앱이 필요하면 서라. 그렇지 않다면 굳이 쓰지 마라.</li>
+<li>pre-compile, js 통합, 품질 확인을 해야한다.</li>
+</ul>
+<h1 id="결론">결론</h1><p>가치를 판단해서 결정하라.</p>
+<h2 id="질답">질답</h2><ul>
+<li>sk에서는 아직 나온 것은 없고 만드는 중..</li>
+<li>naver에서는 웍스에서 곧 나올 예정.</li>
+<li>구글의 폴리머는 재사용의 장점이 있고, 프론트의 개발을 쉽게 할 수 있으며, react와 비슷한 면도 있고 표준이 될 가능성이 더 높은 경향이 있지만… 당장은 쓸 수가 없다. 먼 미래의 이야기. 애플이 받아들일까..? 요즘 이야기가 좀 나오는 듯. 같은 프로젝트 내에서 재사용이 좋다.</li>
+<li>JSX를 안써도 좋다.</li>
 </ul>
 
       
@@ -283,7 +355,7 @@
     <footer>
       
         <div class="alignleft">
-            <a href="/blog/2015/10/07/kotlin-세미나-필기/#more" class="more-link"><i class="fa fa-chevron-right"></i>Read More</a>
+            <a href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-그거-좀-쓰면-더-좋냐/#more" class="more-link"><i class="fa fa-chevron-right"></i>Read More</a>
         </div>
         
         

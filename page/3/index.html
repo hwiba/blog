@@ -81,10 +81,10 @@
   <div class="post-content">
     <header>
       
-      <time datetime="2015-09-23T09:16:55.000Z"><a href="/blog/2015/09/23/start/">Wed, Sep 23 2015, 6:16:55 pm</a></time>
+      <time datetime="2015-10-07T13:29:30.000Z"><a href="/blog/2015/10/07/techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr/">Wed, Oct 7 2015, 10:29:30 pm</a></time>
 
   
-    <h1 class="title"><a href="/blog/2015/09/23/start/">start</a></h1>
+    <h1 class="title"><a href="/blog/2015/10/07/techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr/">techPlanet2015 필기 : Fast and Beautiful: Serving High Quality Photos at Scale on Flickr</a></h1>
   
 
 
@@ -92,7 +92,7 @@
   
   <div class="tags">
   	<i class="fa fa-tag"></i>
-    <a href="/blog/tags/github-page/">github page</a>, <a href="/blog/tags/hexo/">hexo</a>
+    <a href="/blog/tags/image/">image</a>, <a href="/blog/tags/seminar/">seminar</a>
   </div>
 
 <div class="clear"></div>
@@ -100,18 +100,221 @@
     </header>
     <div class="entry">
       
-        <h2 id="Dev_Side_Story_Blog">Dev Side Story Blog</h2><p>평소 쓰는 글 중 개발 관련한 내용만 따로 모아두기 위한 블로그로 <a href="https://github.com" target="_blank" rel="external">github</a>를 사용해보기로 했다.</p>
-<p> github에서 사용하기 위한 정적 사이트 생성기로서 <a href="https://www.ruby-lang.org/ko/" target="_blank" rel="external">ruby</a>로 구현된 <a href="http://jekyllrb.com/" target="_blank" rel="external">jekyll</a>이 자주 언급되는데, ruby에 대해서 잘 모를 뿐더러 ruby 문법이 눈에 잘 맞지 않다고 느꼈기 때문에 다른 도구를 사용하기로 했다.</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 왠지 못생긴 ruby 문법.. 특히 end end end 꼬리 물기가 싫다.</span></span><br><span class="line"><span class="comment"># ....나만 그렇게 생각하나? indent 한 칸 미묘하게 꼬인 python 디버깅하기보단 낫지만..</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RubyExam</span> <span class="inheritance">&lt; <span class="parent">SuperExam</span></span></span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(title, ask, date)</span></span></span><br><span class="line">    <span class="keyword">super</span>(title, ask, date)</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<p>몇가지 후보가 있었는데 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a>를 쓰기로 결정했다. Javascript로 구현되어 있다보니 대강 건드려볼 수 있을 것마냥 생긴데다 은근히 마이너를 골라타는 취향에 맞았기 때문.</p>
-<p>hexo는 node.js 기반의 정적 사이트 생성기로서 github나 heroku 등을 지원하며, 비교적 최근까지 업데이트가 되고 있다는 장점이 있다. 그러나 역시 jekyll에 비하면 부족한 면이 있다는 평들인데 당장 체감은 못하는 중.</p>
+        <blockquote>
+<p>경고 : 이 문서는 오타수정을 포함해 정리를 하지 않은 필기로 잘못 들었거나 잘못 이해했거나 기타 등등 잘못된 내용이 얼마든지 많이 포함되어 있을 수 있습니다.</p>
+</blockquote>
+<p> 스피커 : Hugo Haas(flickr, yahoo)</p>
+<h2 id="what_does_beautiful_mean?">what does beautiful mean?</h2><ul>
+<li>다양한 디스플레이에서, 다양한 압축 기법으로 만든 사진을 여러 사진 작가들에게 보여주고 두 개의 사진을 두었을 때 둘이 같은가 다른가를 조사함.</li>
+</ul>
+<h2 id="what_does_fast_mean?">what does fast mean?</h2><ul>
+<li>어플리케이션을 빠르게 만들기 위해 하는 고민.</li>
+<li>스크린 렌더링이 얼마나 빠르게?</li>
+<li>스크롤 프레임은 얼마나?</li>
+<li>사진을 얼마나 빠르게 로딩?</li>
+<li>etc…</li>
+<li>유저 인터랙션에서 어떤 뎁스로?</li>
+</ul>
+<h2 id="challenges_:_designs_are_more_immersive">challenges : designs are more immersive</h2><pre><code>-<span class="ruby"> 과거 <span class="symbol">:</span> 작은 썸네일, 넓은 빈 공간.
+</span>-<span class="ruby"> 현재<span class="symbol">:</span> 큰 썸네일, 거의 남지 않는 빈 공간. 이는 가능한 스크린을 전체적으로 활용하여 서비스를 표현. 이를 위해 픽셀이 더 요구되었다. 실제 장비가 많이 발전했다.</span>
+</code></pre><h2 id="…but_bandwidth_is_very_disparate_and_not_as_high">…but bandwidth is very disparate and not as high</h2><p>Akamai 414 Asia mobile에 따르면, 픽셀의 증가와 비교하여 대역폭이 충분하지 않다. 적절히 대역폭이 발달하지 않고 있다. 그럼에도 불구하고 유저들의 요구사항은 증가하고 있다.</p>
+<h2 id="Instrument_all_the_layers">Instrument all the layers</h2><ul>
+<li>각 레이어들에 대해 이해하고 측정할 필요가 있다. 수집된 정보를 통해 분석한다.</li>
+<li>최악의 경우, 평균, 최고의 경우</li>
+<li>커넥션이 좋을 때, 나쁠 때.</li>
+<li>지리학적으로는 어떤지?</li>
+<li>다운로드 속도와 렌더링 속도</li>
+<li>처음 byte와 최후의 byte</li>
+<li>등… 여러가지 데이터로부터 통찰을 얻을 수 있다.</li>
+</ul>
+<h2 id="서버_사이드와_레이턴시">서버 사이드와 레이턴시</h2><ul>
+<li>최적화된 코드라도 디바이스의 변화 등으로 적절하지 않을 수 있다. 현재 빠른 코드인지 최대한 빨리 분석하고, 느려지는 곳이 있다면 개선한다.</li>
+<li>가령 미국에서 한국까지 오는데<ul>
+<li>ssl handshake</li>
+<li>http request  // 여기까지가 500+ ms 걸림.</li>
+<li>server side processing // 시간이 걸리긴 하지만 영향력이 적음.</li>
+<li>data transmission // 여기도 많이 느림. 가장 느림.</li>
+<li>이런 케이스에는 느리진 부분 이전을 개선해봐야 (15% 향상) 유저에게는 5% 미만의 체감을 느끼게 됨.</li>
+<li>바이트를 낮춰서 보내자는 계획.</li>
+<li>flickr는 진전을 보아서 절반의 크기(데이터 사이즈)로 같은 수준(유저를 대상으로 분석한)을 유지할 수 있음. </li>
+<li>그러나 이 압축에 많은 비용이 든다. 때문에 미리 S, M, L 사이즈로 미리 이미지를 압축해둔다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="the_importance_of_latency">the importance of latency</h2><ul>
+<li>과거 360kB를 전송할 때 3.7s 걸렸는데, 다음해 120kB를 보냈을 때 2.9s가 걸리는 걸 발견했다.</li>
+<li>이미지 데이터 사이즈를 줄이는게 의미가 있지만, 이것이 실제 속도에 미치는 영향은 일정한 정도에 수렴한다. 이는 latency 때문이다.</li>
+<li>이미지를 아무리 줄여야봐야 물리적인 거리에 의해 일정한 정도에서 한계가 발생한다. 따라서 물리적으로 실 사용자의 디바이스에 가까워질 필요가 있었다.</li>
+</ul>
+<h2 id="It’s_hard_to_replicate_15B_images_globally">It’s hard to replicate 15B images globally</h2><ul>
+<li>유저가 어느 지역의 인물이라고 해서 그의 관심사가 같은 지역에 묶일지 알 수 없다.</li>
+<li>Regional cache를 Image store와 유저 사이에 둠으로서 로드 타임을 줄일 수 있다.</li>
+</ul>
+<h2 id="더_개선할_수_있는가?">더 개선할 수 있는가?</h2><ul>
+<li>클라이언트에서 더 개선해야 한다. 기본적으로 치팅. 이는 예측을 의미.</li>
+<li>사진을 보여준 다음 무엇을 어떻게 할 것인가?</li>
+<li>앞, 뒤 이미지를 보여줄 것인가? 등</li>
+<li>유저의 다음 행동을 예상하고, 미리 예상되는 이미즈를 로딩함으로서 스마트한 클라이언트를 만든다.</li>
+<li>로컬 캐시를 활용하여 더 빠르게 한다.</li>
+<li>opportunistic prefetching</li>
+<li>이것들을 통해 50~70%를 개선할 수 있다.</li>
+<li>하지만 너무 aggressively하게 할 필요는 없다. 사용자들의 대역폭이 제한적인데 너무 많은 대역을 쓰거나, 등 사용자의 자원의 한계가 있으므로 싫어할 수 있다.</li>
+</ul>
+<h2 id="질문_답변-">질문 답변.</h2><ul>
+<li>해보지는 않았지만, 좀 더 영리하게 생각해볼 때, 이미지가 여러 사이즈가 있다. 이 중 썸네일로 쓴 작은 이미지를 먼저 보여주고 더 큰 이미지를 보여주는 순서로 사용한다면 유저가 더 빠르게 보이는 걸로 느낄 수 있을 것 같다.</li>
+<li>flickr에서 선호하는 포맷은? jpeg을 선호해왔으며, 더 큰 이미지를 써야할 때가 있었는데 다른 포맷들을 써보고 있지만 클라이언트의 지원 문제로 다시 jpeg으로 돌아가고는 한다.</li>
+</ul>
 
       
     </div>
     <footer>
       
         <div class="alignleft">
-            <a href="/blog/2015/09/23/start/#more" class="more-link"><i class="fa fa-chevron-right"></i>Read More</a>
+            <a href="/blog/2015/10/07/techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr/#more" class="more-link"><i class="fa fa-chevron-right"></i>Read More</a>
+        </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+      <time datetime="2015-09-26T06:19:23.000Z"><a href="/blog/2015/09/26/java-8-stream-collect/">Sat, Sep 26 2015, 3:19:23 pm</a></time>
+
+  
+    <h1 class="title"><a href="/blog/2015/09/26/java-8-stream-collect/">java 8, stream collect</a></h1>
+  
+
+
+
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/blog/tags/Java8/">Java8</a>
+  </div>
+
+<div class="clear"></div>
+      
+    </header>
+    <div class="entry">
+      
+        <p>JAVA 8에서 추가된 stream API를 사용할 때, stream으로 넘어가기 이전의 collection에서 stream 내의 작업이 완료된 새 collection을 얻기를 원해서 하는 경우가 있다. reduce() 계열에 비해 오히려 이쪽이 더 자주 쓰이지 않을까? 나는 더 자주 쓴다.</p>
+<p>이럴 때는 collect() 메서드가 유용하다.</p>
+<h2 id="기본_용법">기본 용법</h2><p>용례는 다음과 같다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;Object&gt; result = objectList.stream().collect(ArrayList::<span class="keyword">new</span>, ArrayList::add, ArrayList::addAll);</span><br></pre></td></tr></table></figure>
+<p>이 예제의 인자들을 타입으로 보면 이렇다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objectList.stream().collect(Supplier&lt;R&gt; supplier, BiConsumer&lt;R, ? <span class="keyword">super</span> Object&gt; accumulator, BiConsumer&lt;R, R&gt; combiner);</span><br></pre></td></tr></table></figure>
+<p>여기에서 supplier란 어떤 collection의 생성자 레퍼런스이며, accumulator란 대상에 어떤 요소를 추가하는 function이고, combiner는 어떤 collection 2개를 병합하는 function임을 알 수 있다.</p>
+<p>당연하지만 supplier, accumulator, combiner를 일일이 입력하는 것은 몹시 귀찮은 일이다. 이때 쓸 수 있는 <code>Collectors.class</code>가 있다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Object&gt; resultList = objectList.stream().collect(Collectors.toList());</span><br><span class="line"></span><br><span class="line">Set&lt;Object&gt; resultSet = objectList.stream().collect(Collectors.toSet());</span><br></pre></td></tr></table></figure>
+<p>그런데 이 List와 Set은 구체적으로 어떤 구현체로 되어있을까? 명시적으로 핸들링하고 싶다면 <code>Collectors.toCollection(supplier)</code>를 사용할 수 있다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;Object&gt; resultArrayList = objectList.stream().collect(Collectors.toCollection(ArrayList::<span class="keyword">new</span>));</span><br></pre></td></tr></table></figure>
+<h2 id="joining">joining</h2><p><code>collect()</code>는 그 외에도 용도가 다양한 편인데, stream이 String 객체만을 대상으로 하고 있다면 <code>Collectors.joining()</code>을 사용해 String을 결합할 수도 있다. 결합되는 String 사이에 무언가 다른 String을 끼워넣고 싶다면 <code>.joining(&quot;String&quot;)</code>을 사용한다.</p>
+<h2 id="summary">summary</h2><p>그 외에도 int, double, long 객체를 가진 collection을 대상으로 단번에 sum, avg, max, min 값을 원할 때도 <code>collect</code>가 유용할 수 있다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//IntSummaryStatistics, Collectors.summarizingInt 외에 DoubleSummaryStatistics 등이 있다.</span></span><br><span class="line">ToIntFunction&lt;Integer&gt; mapper = i -&gt; i * <span class="number">2</span>;</span><br><span class="line">IntSummaryStatistics intSumAvgMaxMin  = Arrays.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>).stream().collect(Collectors.summarizingInt(mapper));</span><br><span class="line"><span class="keyword">double</span> avg = intSumAvgMaxMin.getAverage();</span><br><span class="line"><span class="keyword">double</span> sum = intSumAvgMaxMin.getSum();</span><br><span class="line"><span class="comment">//.... 기타 등</span></span><br></pre></td></tr></table></figure>
+<h2 id="toMap">toMap</h2><p><code>collect(Collectors.toMap())</code>의 경우는 조금 더 복잡하다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// key&amp;value</span></span><br><span class="line">groupRepository.findAll().stream().collect(Collectors.toMap(Group::getId, Group::getAdmin));</span><br><span class="line"></span><br><span class="line"><span class="comment">// value가 요소 자신인 경우 i -&gt; i, 즉 identity()이므로 다음 둘은 동일하다.</span></span><br><span class="line">groupRepository.findAll().stream().collect(Collectors.toMap(Group::getId, i -&gt; i));</span><br><span class="line">groupRepository.findAll().stream().collect(Collectors.toMap(Group::getId, Function.identity()));</span><br><span class="line"></span><br><span class="line"><span class="comment">// key가 같은 케이스가 복수일 때는 .toMap()에 3번째 parameter를 던져서 해결한다.</span></span><br><span class="line"><span class="comment">// 3번째 인자는 BinaryOperator&lt;U&gt; mergeFunction이다.</span></span><br><span class="line"><span class="comment">// 즉 타입이 같은 둘을 받아서 합치던 둘 중 하나를 골라내던 같은 타입 하나를 return한다.</span></span><br><span class="line"><span class="comment">// 이외에 exception을 날릴 수도 있다.</span></span><br><span class="line">groupRepository.findAll().stream().collect(Collectors.toMap(Group::getAdminId</span><br><span class="line">    , i -&gt; i</span><br><span class="line">    , (oldGroup, newGroup) -&gt; newGroup ));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Map의 구현체를 선택하고 싶다면 4번 째 인자로 생성자 레퍼런스를 던진다.</span></span><br><span class="line">groupRepository.findAll().stream().collect(Collectors.toMap(Group::getAdminId</span><br><span class="line">    , i -&gt; i</span><br><span class="line">    , (oldGroup, newGroup) -&gt; newGroup</span><br><span class="line">    , HashMap::<span class="keyword">new</span> ));</span><br></pre></td></tr></table></figure>
+<h2 id="groupingBy와_partitioningBy">groupingBy와 partitioningBy</h2><p>Collectors.toMap의 3번 째 parameter로 동일한 key를 가진 복수개의 요소를 처리할 수 있지만, collection에서 중복된 요소들을 모아 group을 만들기 위해서 map을 만드려고 하는 요구를 달성하기에는 좀 귀찮아진다. 때문에 이 작업을 위한 메서드가 별도로 있다. <code>groupingBy</code>와 <code>partitioningBy</code>가 그것이다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String name, <span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span>  <span class="title">isAdult</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.age &gt; <span class="number">18</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">List&lt;Person&gt; people = <span class="keyword">new</span> ArrayList&lt;Person&gt;();</span><br><span class="line">people.add(<span class="keyword">new</span> Person(<span class="string">"Hyva"</span>, <span class="number">19</span>));</span><br><span class="line">people.add(<span class="keyword">new</span> Person(<span class="string">"Javajigi"</span>, <span class="number">43</span>));</span><br><span class="line">people.add(<span class="keyword">new</span> Person(<span class="string">"Javajigi"</span>, <span class="number">16</span>));</span><br><span class="line">people.add(<span class="keyword">new</span> Person(<span class="string">"Ybin"</span>, <span class="number">16</span>));</span><br><span class="line">people.add(<span class="keyword">new</span> Person(<span class="string">"Das"</span>, <span class="number">18</span>));</span><br><span class="line">people.add(<span class="keyword">new</span> Person(<span class="string">"Das"</span>, <span class="number">27</span>));</span><br></pre></td></tr></table></figure>
+<p>이제 Person의 name으로 grouping 해보자. nameGroup은 Person::getName으로 분류된 그룹이므로 이름이 같인 Person을 묶어 List를 만들고, 그 이름을 Key로 하여 Map에 넣는다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, List&lt;Person&gt;&gt; nameGroup = people.stream().collect(Collectors.groupingBy(Person::getName));</span><br><span class="line"></span><br><span class="line"><span class="comment">// grouping을 하고 싶다면 groupingBy 대신 groupingByConcurrent를 쓸 수 있다.</span></span><br><span class="line">Map&lt;String, List&lt;Person&gt;&gt; nameGroup2 = people.parallelStream().collect(Collectors.groupingByConcurrent(Person::getName));</span><br></pre></td></tr></table></figure>
+<p>위의 Person::getName처럼 분류 목적으로 사용한 function을  classfier function이라고 한다. classfier function이 <code>T t -&gt; boolean</code>라면, 즉 <code>Predicate&lt;T&gt;</code>라면 groupingBy 대신 partitioningBy를 쓸 수 있다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Boolean, List&lt;Person&gt;&gt; generationGroup = people.stream().collect(Collectors.partitioningBy(Person::isAdult));</span><br><span class="line">List&lt;Person&gt; adultGroup = generationGroup.get(<span class="keyword">true</span>);</span><br><span class="line">List&lt;Person&gt; kidsGroup = generationGroup.get(<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="Downstream_collector">Downstream collector</h2><p>예제처럼 groupingBy나 partitioningBy를 그냥 쓰면 Map의 value는 List다. 개발을 하다보면 단순히 count만 필요하거나, Set인 것이 편할 때가 있다. <code>downstream</code>을 던져넣어 List가 아닌 다른 value를 가진 Map을 얻을 수 있다.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//타입으로 보면 이렇다.</span></span><br><span class="line">Collectors.groupingBy(Function&lt;? <span class="keyword">super</span> T,? extends K&gt; classifier, Collector&lt;? <span class="keyword">super</span> T,A,D&gt; downstream);</span><br><span class="line"></span><br><span class="line"><span class="comment">// key가 같은 value가 몇 개인지 count만 얻기</span></span><br><span class="line">Map&lt;String, Set&lt;Person&gt;&gt; nameGroupCount = people.stream().collect(Collectors.groupingBy(Person::getName, Collectors.counting()));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 집합으로 얻기</span></span><br><span class="line">Map&lt;String, Set&lt;Person&gt;&gt; nameGroupSet = people.stream().collect(Collectors.groupingBy(Person::getName, Collectors.toSet()));</span><br></pre></td></tr></table></figure>
+<p><code>summingInt</code>, <code>summarizingInt</code>, <code>mapping</code>, <code>maxBy</code>, <code>minBy</code>, <code>reducing</code> 등 여러가지를 쓸 수 있으므로 적절히 사용하면 편리해지지만, depth가 너무 깊어지지 않게 주의하자. 하려고 하면 아주 복잡해질 수 있는 부분이다.</p>
+<p>이외에도<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Collectors <span class="title">groupingBy</span><span class="params">(Function&lt;? <span class="keyword">super</span> T,? extends K&gt; classifier, Supplier&lt;M&gt; mapFactory, Collector&lt;? <span class="keyword">super</span> T,A,D&gt; downstream)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>의 형태로 mapFactory를 넣을 수도 있는데.. 충분히 길어졌으므로 이 포스팅은 여기서 끊자.</p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/blog/2015/09/26/java-8-stream-collect/#more" class="more-link"><i class="fa fa-chevron-right"></i>Read More</a>
+        </div>
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <div class="post-content">
+    <header>
+      
+      <time datetime="2015-09-24T08:53:50.000Z"><a href="/blog/2015/09/24/ubuntu에서-apt-get으로-jenkins-설치한-뒤-update-할-때-error/">Thu, Sep 24 2015, 5:53:50 pm</a></time>
+
+  
+    <h1 class="title"><a href="/blog/2015/09/24/ubuntu에서-apt-get으로-jenkins-설치한-뒤-update-할-때-error/">ubuntu에서 apt-get으로 jenkins 설치한 뒤 update 할 때 error</a></h1>
+  
+
+
+
+  
+  <div class="tags">
+  	<i class="fa fa-tag"></i>
+    <a href="/blog/tags/CI/">CI</a>, <a href="/blog/tags/jenkins/">jenkins</a>, <a href="/blog/tags/ubuntu/">ubuntu</a>
+  </div>
+
+<div class="clear"></div>
+      
+    </header>
+    <div class="entry">
+      
+        <p><a href="https://jenkins-ci.org" target="_blank" rel="external">jenkins</a>는 war 패키지(약 63.2MB, ver 1.630 기준)를 받아서 tomcat 등에 올릴 수 있지만 tomcat 등을 쓰지 않고 직접 설치해서 쓸 수도 있다. 이 경우에도 내부적으로는 tomcat이 쓰이겠지만 tomcat을 사용하는 프로젝트가 없다면 해봄직한 방법이다. 굳이 tomcat에 대해 새로 이해하거나 할 필요가 없어지니까.</p>
+<p>내 경우에는 springboot 앱을 tomcat에 풀지 않고 직접 돌리는 중이기 때문에 tomcat 설치가 귀찮아서 이 방법을 써보기로 했다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## wget으로 key를 가져올 때 잘 안될 때가 있다. 그럴 때는 retry하자.</span></span><br><span class="line">$ wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -</span><br><span class="line">$ sudo sh -c <span class="string">'echo deb http://pkg.jenkins-ci.org/debian binary/ &gt; /etc/apt/sources.list.d/jenkins.list'</span></span><br><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install jenkins</span><br></pre></td></tr></table></figure>
+<p>이렇게 해서 잘 설치가 되면 기본 설정으로 8080 port를 통해 jekins 페이지에 접속할 수 있다. 그런데 만약 jenkins를 <code>wget부터 update</code> 까지의 절차 없이 먼저 <code>apt-get install jenkins</code>로 설치했다면 구버전 jekins이다. plugin 설치 등에 문제가 발생할 수 있으므로 업데이트가 필요하다.</p>
+<p>jenkins를 깔끔하게 지우고 다시 설치하면 된다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get remove jenkins</span><br><span class="line">$ sudo apt-get remove jenkins-common</span><br></pre></td></tr></table></figure>
+<p>위처럼 지우지 않고 그냥 <code>apt-get install jenkins</code>를 할 경우 error가 발생한다. error야 여러가지가 있겠지만 jenkins-common까지 지우고 재설치하면 어지간해서는 통과되는 듯.</p>
+
+      
+    </div>
+    <footer>
+      
+        <div class="alignleft">
+            <a href="/blog/2015/09/24/ubuntu에서-apt-get으로-jenkins-설치한-뒤-update-할-때-error/#more" class="more-link"><i class="fa fa-chevron-right"></i>Read More</a>
         </div>
         
         
@@ -129,6 +332,8 @@
   
     <a href="/blog/page/2/" class="alignleft prev"><i class="fa fa-long-arrow-left"></i>Prev</a>
   
+  
+    <a href="/blog/page/4/" class="alignright next">Next<i class="fa fa-long-arrow-right"></i></a>
   
   <div class="clearfix"></div>
 </nav>
