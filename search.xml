@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title><![CDATA[gitError: pathscpec 'src/...' did not match any file(s) known to git.]]></title>
+      <link href="http://hwiba.github.io/blog/blog/2015/10/24/gitError-pathscpec-src-did-not-match-any-file-s-known-to-git/"/>
+      <url>http://hwiba.github.io/blog/blog/2015/10/24/gitError-pathscpec-src-did-not-match-any-file-s-known-to-git/</url>
+      <content type="html"><![CDATA[<p>intellij에서 github에 commit&amp;push를 한번에 날리면</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">error</span>: pathspec 'src/main/java/… …</span><br><span class="line">…/controller/HomeController.java' did <span class="keyword">not</span> match any <span class="type">file</span>(s) known <span class="keyword">to</span> git.</span><br></pre></td></tr></table></figure>
+<p>이런 에러가 나타나기 시작했다. 정확하게 어떤 이유인지는 모르겠지만 intellij에서 git commit을 수동으로 먼저하고 push를 하면 무시하고 지나가는 이상함을 보였는데 수동이랑 자동에 어떤 차이가 있단 말인가?</p>
+<p>일단 당장 몹시 귀찮은 문제이므로 파고들기보다는 해결부터 하기로 했다.</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git mv originPath<span class="class">.file</span> newPath<span class="class">.file</span></span><br><span class="line">git commit -m <span class="string">"escape pathspec error"</span></span><br><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+<p>git repository의 기록된 저장소와 다르다고 나타나는 문제인데 나타나면 다 나타날 것이지 왜 하나의 파일에서만 이런 일이 발생하는지 잘 모르겠지만 파일명을 변경한 후 커밋한다던가 하는 간단한 방법으로 벗어날 수 있다.</p>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[Next 웹 프론트엔드 세미나, 프론트엔드개발, 그럴 수 있지.]]></title>
       <link href="http://hwiba.github.io/blog/blog/2015/10/15/Next-%E1%84%8B%E1%85%B0%E1%86%B8-%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%86%AB%E1%84%90%E1%85%B3%E1%84%8B%E1%85%A6%E1%86%AB%E1%84%83%E1%85%B3-%E1%84%89%E1%85%A6%E1%84%86%E1%85%B5%E1%84%82%E1%85%A1-%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%86%AB%E1%84%90%E1%85%B3%E1%84%8B%E1%85%A6%E1%86%AB%E1%84%83%E1%85%B3%E1%84%80%E1%85%A2%E1%84%87%E1%85%A1%E1%86%AF-%E1%84%80%E1%85%B3%E1%84%85%E1%85%A5%E1%86%AF-%E1%84%89%E1%85%AE-%E1%84%8B%E1%85%B5%E1%86%BB%E1%84%8C%E1%85%B5/"/>
       <url>http://hwiba.github.io/blog/blog/2015/10/15/Next-%E1%84%8B%E1%85%B0%E1%86%B8-%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%86%AB%E1%84%90%E1%85%B3%E1%84%8B%E1%85%A6%E1%86%AB%E1%84%83%E1%85%B3-%E1%84%89%E1%85%A6%E1%84%86%E1%85%B5%E1%84%82%E1%85%A1-%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%86%AB%E1%84%90%E1%85%B3%E1%84%8B%E1%85%A6%E1%86%AB%E1%84%83%E1%85%B3%E1%84%80%E1%85%A2%E1%84%87%E1%85%A1%E1%86%AF-%E1%84%80%E1%85%B3%E1%84%85%E1%85%A5%E1%86%AF-%E1%84%89%E1%85%AE-%E1%84%8B%E1%85%B5%E1%86%BB%E1%84%8C%E1%85%B5/</url>
