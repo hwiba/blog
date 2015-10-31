@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Force Push</title>
+  <title>Archives: 2015/11 | Force Push</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Force Push">
-<meta property="og:url" content="http://hwiba.github.io/blog/page/9/index.html">
+<meta property="og:url" content="http://hwiba.github.io/blog/archives/2015/11/index.html">
 <meta property="og:site_name" content="Force Push">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -61,112 +61,36 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/blog/2015/10/07/techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr/" class="article-date">
-  <time datetime="2015-10-07T13:29:30.000Z" itemprop="datePublished">2015-10-07</time>
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/blog/archives/2015" class="archive-year">2015</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/blog/2015/11/01/jspm-react-uglifyjs로-front-end-환경-세팅하기/" class="archive-article-date">
+  <time datetime="2015-10-31T15:51:38.000Z" itemprop="datePublished">Nov 1</time>
 </a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+      
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2015/10/07/techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr/">techPlanet2015 필기 : Fast and Beautiful: Serving High Quality Photos at Scale on Flickr</a>
+      <a class="archive-article-title" href="/blog/2015/11/01/jspm-react-uglifyjs로-front-end-환경-세팅하기/">jspm, react, uglifyjs로 front end 환경 세팅하기</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>경고 : 이 문서는 오타수정을 포함해 정리를 하지 않은 필기로 잘못 들었거나 잘못 이해했거나 기타 등등 잘못된 내용이 얼마든지 많이 포함되어 있을 수 있습니다.</p>
-</blockquote>
-<p> 스피커 : Hugo Haas(flickr, yahoo)</p>
-<h2 id="what_does_beautiful_mean?">what does beautiful mean?</h2><ul>
-<li>다양한 디스플레이에서, 다양한 압축 기법으로 만든 사진을 여러 사진 작가들에게 보여주고 두 개의 사진을 두었을 때 둘이 같은가 다른가를 조사함.</li>
-</ul>
-<h2 id="what_does_fast_mean?">what does fast mean?</h2><ul>
-<li>어플리케이션을 빠르게 만들기 위해 하는 고민.</li>
-<li>스크린 렌더링이 얼마나 빠르게?</li>
-<li>스크롤 프레임은 얼마나?</li>
-<li>사진을 얼마나 빠르게 로딩?</li>
-<li>etc…</li>
-<li>유저 인터랙션에서 어떤 뎁스로?</li>
-</ul>
-<h2 id="challenges_:_designs_are_more_immersive">challenges : designs are more immersive</h2><pre><code>-<span class="ruby"> 과거 <span class="symbol">:</span> 작은 썸네일, 넓은 빈 공간.
-</span>-<span class="ruby"> 현재<span class="symbol">:</span> 큰 썸네일, 거의 남지 않는 빈 공간. 이는 가능한 스크린을 전체적으로 활용하여 서비스를 표현. 이를 위해 픽셀이 더 요구되었다. 실제 장비가 많이 발전했다.</span>
-</code></pre><h2 id="…but_bandwidth_is_very_disparate_and_not_as_high">…but bandwidth is very disparate and not as high</h2><p>Akamai 414 Asia mobile에 따르면, 픽셀의 증가와 비교하여 대역폭이 충분하지 않다. 적절히 대역폭이 발달하지 않고 있다. 그럼에도 불구하고 유저들의 요구사항은 증가하고 있다.</p>
-<h2 id="Instrument_all_the_layers">Instrument all the layers</h2><ul>
-<li>각 레이어들에 대해 이해하고 측정할 필요가 있다. 수집된 정보를 통해 분석한다.</li>
-<li>최악의 경우, 평균, 최고의 경우</li>
-<li>커넥션이 좋을 때, 나쁠 때.</li>
-<li>지리학적으로는 어떤지?</li>
-<li>다운로드 속도와 렌더링 속도</li>
-<li>처음 byte와 최후의 byte</li>
-<li>등… 여러가지 데이터로부터 통찰을 얻을 수 있다.</li>
-</ul>
-<h2 id="서버_사이드와_레이턴시">서버 사이드와 레이턴시</h2><ul>
-<li>최적화된 코드라도 디바이스의 변화 등으로 적절하지 않을 수 있다. 현재 빠른 코드인지 최대한 빨리 분석하고, 느려지는 곳이 있다면 개선한다.</li>
-<li>가령 미국에서 한국까지 오는데<ul>
-<li>ssl handshake</li>
-<li>http request  // 여기까지가 500+ ms 걸림.</li>
-<li>server side processing // 시간이 걸리긴 하지만 영향력이 적음.</li>
-<li>data transmission // 여기도 많이 느림. 가장 느림.</li>
-<li>이런 케이스에는 느리진 부분 이전을 개선해봐야 (15% 향상) 유저에게는 5% 미만의 체감을 느끼게 됨.</li>
-<li>바이트를 낮춰서 보내자는 계획.</li>
-<li>flickr는 진전을 보아서 절반의 크기(데이터 사이즈)로 같은 수준(유저를 대상으로 분석한)을 유지할 수 있음. </li>
-<li>그러나 이 압축에 많은 비용이 든다. 때문에 미리 S, M, L 사이즈로 미리 이미지를 압축해둔다.</li>
-</ul>
-</li>
-</ul>
-<h2 id="the_importance_of_latency">the importance of latency</h2><ul>
-<li>과거 360kB를 전송할 때 3.7s 걸렸는데, 다음해 120kB를 보냈을 때 2.9s가 걸리는 걸 발견했다.</li>
-<li>이미지 데이터 사이즈를 줄이는게 의미가 있지만, 이것이 실제 속도에 미치는 영향은 일정한 정도에 수렴한다. 이는 latency 때문이다.</li>
-<li>이미지를 아무리 줄여야봐야 물리적인 거리에 의해 일정한 정도에서 한계가 발생한다. 따라서 물리적으로 실 사용자의 디바이스에 가까워질 필요가 있었다.</li>
-</ul>
-<h2 id="It’s_hard_to_replicate_15B_images_globally">It’s hard to replicate 15B images globally</h2><ul>
-<li>유저가 어느 지역의 인물이라고 해서 그의 관심사가 같은 지역에 묶일지 알 수 없다.</li>
-<li>Regional cache를 Image store와 유저 사이에 둠으로서 로드 타임을 줄일 수 있다.</li>
-</ul>
-<h2 id="더_개선할_수_있는가?">더 개선할 수 있는가?</h2><ul>
-<li>클라이언트에서 더 개선해야 한다. 기본적으로 치팅. 이는 예측을 의미.</li>
-<li>사진을 보여준 다음 무엇을 어떻게 할 것인가?</li>
-<li>앞, 뒤 이미지를 보여줄 것인가? 등</li>
-<li>유저의 다음 행동을 예상하고, 미리 예상되는 이미즈를 로딩함으로서 스마트한 클라이언트를 만든다.</li>
-<li>로컬 캐시를 활용하여 더 빠르게 한다.</li>
-<li>opportunistic prefetching</li>
-<li>이것들을 통해 50~70%를 개선할 수 있다.</li>
-<li>하지만 너무 aggressively하게 할 필요는 없다. 사용자들의 대역폭이 제한적인데 너무 많은 대역을 쓰거나, 등 사용자의 자원의 한계가 있으므로 싫어할 수 있다.</li>
-</ul>
-<h2 id="질문_답변-">질문 답변.</h2><ul>
-<li>해보지는 않았지만, 좀 더 영리하게 생각해볼 때, 이미지가 여러 사이즈가 있다. 이 중 썸네일로 쓴 작은 이미지를 먼저 보여주고 더 큰 이미지를 보여주는 순서로 사용한다면 유저가 더 빠르게 보이는 걸로 느낄 수 있을 것 같다.</li>
-<li>flickr에서 선호하는 포맷은? jpeg을 선호해왔으며, 더 큰 이미지를 써야할 때가 있었는데 다른 포맷들을 써보고 있지만 클라이언트의 지원 문제로 다시 jpeg으로 돌아가고는 한다.</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://hwiba.github.io/blog/2015/10/07/techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr/" data-id="cigfbzkhc000fibfv1wn64ren" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/image/">image</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/세미나/">세미나</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
 </article>
-
-
   
   
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/blog/page/8/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/7/">7</a><a class="page-number" href="/blog/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/blog/page/10/">10</a><a class="page-number" href="/blog/page/11/">11</a><a class="page-number" href="/blog/page/12/">12</a><a class="extend next" rel="next" href="/blog/page/10/">Next &raquo;</a>
-    </nav>
+    </div></section>
   
 </section>
         

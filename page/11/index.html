@@ -61,10 +61,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-start" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-ubuntu에서-apt-get으로-jenkins-설치한-뒤-update-할-때-error" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2015/09/23/start/" class="article-date">
-  <time datetime="2015-09-23T09:16:55.000Z" itemprop="datePublished">2015-09-23</time>
+    <a href="/blog/2015/09/24/ubuntu에서-apt-get으로-jenkins-설치한-뒤-update-할-때-error/" class="article-date">
+  <time datetime="2015-09-24T08:53:50.000Z" itemprop="datePublished">2015-09-24</time>
 </a>
     
   </div>
@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2015/09/23/start/">start</a>
+      <a class="article-title" href="/blog/2015/09/24/ubuntu에서-apt-get으로-jenkins-설치한-뒤-update-할-때-error/">ubuntu에서 apt-get으로 jenkins 설치한 뒤 update 할 때 error</a>
     </h1>
   
 
@@ -83,19 +83,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Dev_Side_Story_Blog">Dev Side Story Blog</h2><p>평소 쓰는 글 중 개발 관련한 내용만 따로 모아두기 위한 블로그로 <a href="https://github.com" target="_blank" rel="external">github</a>를 사용해보기로 했다.</p>
-<p> github에서 사용하기 위한 정적 사이트 생성기로서 <a href="https://www.ruby-lang.org/ko/" target="_blank" rel="external">ruby</a>로 구현된 <a href="http://jekyllrb.com/" target="_blank" rel="external">jekyll</a>이 자주 언급되는데, ruby에 대해서 잘 모를 뿐더러 ruby 문법이 눈에 잘 맞지 않다고 느꼈기 때문에 다른 도구를 사용하기로 했다.</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 왠지 못생긴 ruby 문법.. 특히 end end end 꼬리 물기가 싫다.</span></span><br><span class="line"><span class="comment"># ....나만 그렇게 생각하나? indent 한 칸 미묘하게 꼬인 python 디버깅하기보단 낫지만..</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RubyExam</span> <span class="inheritance">&lt; <span class="parent">SuperExam</span></span></span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(title, ask, date)</span></span></span><br><span class="line">    <span class="keyword">super</span>(title, ask, date)</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<p>몇가지 후보가 있었는데 <a href="https://hexo.io/" target="_blank" rel="external">hexo</a>를 쓰기로 결정했다. Javascript로 구현되어 있다보니 대강 건드려볼 수 있을 것마냥 생긴데다 은근히 마이너를 골라타는 취향에 맞았기 때문.</p>
-<p>hexo는 node.js 기반의 정적 사이트 생성기로서 github나 heroku 등을 지원하며, 비교적 최근까지 업데이트가 되고 있다는 장점이 있다. 그러나 역시 jekyll에 비하면 부족한 면이 있다는 평들인데 당장 체감은 못하는 중.</p>
+        <p><a href="https://jenkins-ci.org" target="_blank" rel="external">jenkins</a>는 war 패키지(약 63.2MB, ver 1.630 기준)를 받아서 tomcat 등에 올릴 수 있지만 tomcat 등을 쓰지 않고 직접 설치해서 쓸 수도 있다. 이 경우에도 내부적으로는 tomcat이 쓰이겠지만 tomcat을 사용하는 프로젝트가 없다면 해봄직한 방법이다. 굳이 tomcat에 대해 새로 이해하거나 할 필요가 없어지니까.</p>
+<p>내 경우에는 springboot 앱을 tomcat에 풀지 않고 직접 돌리는 중이기 때문에 tomcat 설치가 귀찮아서 이 방법을 써보기로 했다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## wget으로 key를 가져올 때 잘 안될 때가 있다. 그럴 때는 retry하자.</span></span><br><span class="line">$ wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -</span><br><span class="line">$ sudo sh -c <span class="string">'echo deb http://pkg.jenkins-ci.org/debian binary/ &gt; /etc/apt/sources.list.d/jenkins.list'</span></span><br><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install jenkins</span><br></pre></td></tr></table></figure>
+<p>이렇게 해서 잘 설치가 되면 기본 설정으로 8080 port를 통해 jekins 페이지에 접속할 수 있다. 그런데 만약 jenkins를 <code>wget부터 update</code> 까지의 절차 없이 먼저 <code>apt-get install jenkins</code>로 설치했다면 구버전 jekins이다. plugin 설치 등에 문제가 발생할 수 있으므로 업데이트가 필요하다.</p>
+<p>jenkins를 깔끔하게 지우고 다시 설치하면 된다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo apt-get remove jenkins</span><br><span class="line">$ sudo apt-get remove jenkins-common</span><br></pre></td></tr></table></figure>
+<p>위처럼 지우지 않고 그냥 <code>apt-get install jenkins</code>를 할 경우 error가 발생한다. error야 여러가지가 있겠지만 jenkins-common까지 지우고 재설치하면 어지간해서는 통과되는 듯.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://hwiba.github.io/blog/2015/09/23/start/" data-id="cigafncgf000l9ufvsp3ihzdb" class="article-share-link">Share</a>
+      <a data-url="http://hwiba.github.io/blog/2015/09/24/ubuntu에서-apt-get으로-jenkins-설치한-뒤-update-할-때-error/" data-id="cigfbzkh40007ibfvy0po9ks1" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/github-page/">github page</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/hexo/">hexo</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/CI/">CI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/jenkins/">jenkins</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a></li></ul>
 
     </footer>
   </div>
@@ -106,7 +108,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/blog/page/10/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/9/">9</a><a class="page-number" href="/blog/page/10/">10</a><span class="page-number current">11</span>
+      <a class="extend prev" rel="prev" href="/blog/page/10/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/9/">9</a><a class="page-number" href="/blog/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/blog/page/12/">12</a><a class="extend next" rel="next" href="/blog/page/12/">Next &raquo;</a>
     </nav>
   
 </section>
@@ -119,7 +121,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">11</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">3</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jspm/">jspm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/react/">react</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/uglifyjs/">uglifyjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -128,7 +130,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 13.33px;">Java 8</a> <a href="/blog/tags/error/" style="font-size: 10px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/세미나/" style="font-size: 16.67px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 13.33px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 13.33px;">프론트엔드</a>
+      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 12.5px;">Java 8</a> <a href="/blog/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/blog/tags/error/" style="font-size: 10px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/jspm/" style="font-size: 10px;">jspm</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/uglifyjs/" style="font-size: 10px;">uglifyjs</a> <a href="/blog/tags/세미나/" style="font-size: 17.5px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 12.5px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 15px;">프론트엔드</a>
     </div>
   </div>
 
@@ -137,7 +139,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -147,6 +149,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog/2015/11/01/jspm-react-uglifyjs로-front-end-환경-세팅하기/">jspm, react, uglifyjs로 front end 환경 세팅하기</a>
+          </li>
         
           <li>
             <a href="/blog/2015/10/24/gitError-pathscpec-src-did-not-match-any-file-s-known-to-git/">gitError: pathscpec &#39;src/...&#39; did not match any file(s) known to git.</a>
@@ -162,10 +168,6 @@
         
           <li>
             <a href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-그거-좀-쓰면-더-좋냐/">Next 웹 프론트엔드 세미나, 그거 좀 쓰면 더 좋냐?</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2015/10/15/Java-7-null-check-하기/">Java 7, null check 하기</a>
           </li>
         
       </ul>
