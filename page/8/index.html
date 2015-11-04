@@ -61,10 +61,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-kotlin-세미나-필기" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Java-8-Functional-Interface-Nominal-typing" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2015/10/07/kotlin-세미나-필기/" class="article-date">
-  <time datetime="2015-10-07T13:30:04.000Z" itemprop="datePublished">2015-10-07</time>
+    <a href="/blog/2015/10/12/Java-8-Functional-Interface-Nominal-typing/" class="article-date">
+  <time datetime="2015-10-12T08:03:28.000Z" itemprop="datePublished">2015-10-12</time>
 </a>
     
   </div>
@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2015/10/07/kotlin-세미나-필기/">kotlin 세미나 필기</a>
+      <a class="article-title" href="/blog/2015/10/12/Java-8-Functional-Interface-Nominal-typing/">Java 8, Functional Interface - Nominal typing</a>
     </h1>
   
 
@@ -83,48 +83,35 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>경고 : 이 문서는 오타수정을 포함해 정리를 하지 않은 필기로 잘못 들었거나 잘못 이해했거나 기타 등등 잘못된 내용이 얼마든지 많이 포함되어 있을 수 있습니다.</p>
-</blockquote>
-<p>발표자 : 익명 처리함…</p>
-<ul>
-<li>특기 사항 : 코틀린보다는 스칼라+스파크+제플린을 더 좋아함.</li>
-<li>안드로이드에서 잘 맞음.</li>
-<li>jvm에서 돌아가는 언어로서 자바와 호환됨.</li>
-<li>intellij에 to Kotlin 기능이 있음.</li>
-<li>정적 타입 언어.</li>
-<li>안드로이드는 공식적으로 java 6까지만 지원함.</li>
-<li>달빅 vm은 method 갯수 제한이 있다. 약 6.5만개. 큼직한 라이브러리, jodaTime, guava 등이 각각 1만개 근처이므로 큼직한 라이브러리 몇 개만 넣어도 뭘 할 수가 없다.</li>
-<li>스칼라를 안드로이드에서 쓰려는 시도도 있었지만 스칼라 자체가 거대한 라이브러리로(메서드 약 5만개) 구성되어 있어서 안드로이드에 직접 쓰기는 몹시 부담이 된다.</li>
-<li>때문에 간결하면서 유려하고 모던한 새 언어의 필요가 있어 코틀린이 탄생함.</li>
+        <p>Java 8은 Functional한 코드 스타일을 지원하기 위해 Functional Interface와 Stream API, method reference 등을 추가했다. 이번 포스팅은 <strong>Functional Interface</strong>에 대해 다룬다.</p>
+<h1 id="정의">정의</h1><p>일반적으로 함수형을 지원하는 프로그래밍 언어에서는 <strong>함수(function)가 <em>1st-class citizen</em>이다.</strong> 이것은 함수가 함수의 파라미터로 전달 될 수 있으며, 함수가 반환값일 수 있고, 데이터로서 다루어질 수 있음을 의미한다. <em>1st-class citizen</em>의 조건에 대해서는 보다 심도 있는 논의가 있지만 이 정도로만 생각하고 넘어가는 것이 일반적인 것 같다. 더 자세한 내용은 <a href="https://mitpress.mit.edu/sicp/full-text/book/book-Z-H-12.html" target="_blank" rel="external">sicp의 First class 정의</a> 등을 참고하자.</p>
+<h3 id="First_Class_Elements">First Class Elements</h3><ul>
+<li>They may be named by variables.</li>
+<li>They may be passed as arguments to procedures.</li>
+<li>They may be returned as the results of procedures.</li>
+<li>They may be included in data structures.</li>
 </ul>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data <span class="class"><span class="keyword">class</span> <span class="title">customer</span></span>(<span class="variable"><span class="keyword">val</span> name</span>: String, <span class="variable"><span class="keyword">val</span> email</span>: String, <span class="variable"><span class="keyword">val</span> company</span>: String)</span><br></pre></td></tr></table></figure>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">val</span> psitiveNumbers</span> = list.filter &#123; it &gt; <span class="number">0</span> &#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">object</span> ThisIsASingleton &#123;</span><br><span class="line">  <span class="variable"><span class="keyword">val</span> companyName</span> : String = “testname”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">var</span> output</span> : String</span><br><span class="line">output = <span class="literal">null</span> <span class="comment">// 코틀린의 타입은 래퍼이기 때문에 String type이면서 동시에 값이 null일 수 있다. ?와 !!로 제어 가능.</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">calculateTotal</span><span class="params">(obj: <span class="typename">Any</span>)</span> &#123;</span></span><br><span class="line">  <span class="keyword">if</span> (obj <span class="keyword">is</span> Invoice) &#123;</span><br><span class="line">    obj.calculateTotal()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//is 문은 타입 검사며, 이 문 안에서는 자동으로 타입 캐스팅 된다.</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>자바 라이브러리를 직접 사용할 수 있다.</li>
-<li>JavaScript. Write code in Kotlin and target JavaScript to run on Node.js or in browser(자바 스크립트로 컴파일 할 수 있다.)</li>
-<li>컴파일 속도가 가볍고 빠르기 때문에 스칼라와 달리 안드로이드에 매우 적합하지만 그만큼 기능은 적기 때문에 서버에서는 굳이 쓸 이유가 없다.</li>
-<li>안드로이드에서 코틀린을 쓸 때의 장점은 매우 많다. 람다도 쓸 수 있고, 클래스에 익스텐션을 만들 수 있고(기본 타입에 메서드를 추가할 수 있는 것을 의미)</li>
-<li>코틀린 런타입은 1071개, 표준 라이브러리는 약 5000개로 매우 가볍다.</li>
-<li>비트윈이 모든 코드를 코틀린으로 바꾸지는 않았다. 디펜던시 인젝션을 위한 apt, 버터나이프(코틀린 전용으로 래핑한 kotterKnife도 있음.) 라이브러리(스프링에서 어노테이션으로 인젝션 해주는 것 같이.)가 자바 라이브러리인데 어노테이션은 제대로 코틀린에 적용되지 않았다. 그러나 지금은 지원함. 따라서 올해 중에 완전 변환 할 것.</li>
-<li>menu : Menu?는 Menu를 Optional 타입으로 할 때.</li>
-<li>자바와 달리 코틀린은 이중 상속을 허용한다. 이 때문에 슈퍼의 것을 사용할 때 어떤 것인지 명시해주어야 할 때가 있어 toKotlin이 완전하지 않은 경우가 있다. 이외에는 별 문제 없음.</li>
-<li>코틀린 표준 라이브러리에서 array, list 등 자바에서 기본적으로 제공하는 라이브러리를 따로 가지고 있다. 자바 기본은 너무 오래되었고(..!), map, reduce 등을 쓰기 위해 표준 라이브러리에 추가함. 그런데 이게 인터페이스만 있고 구현은 빠져있다.</li>
-<li>스칼라는 방대한 컬렉션 라이브러리를 가지고 있지만 코틀린은 가볍게 하기 위해 컴파일 시 필요한 파트만 구현을 제너레이트 해서 집어넣는 방식으로 가볍게 한다.</li>
-<li>그런데 안드로이드 킷캣 이후로는 cpu를 더 쓰더라도 메모리를 적게 쓰기 위해 컬렉션 라이브러리 구현을 통합했다(? 난 잘 모름..). 이게 코틀린에서 어떻게 될 지, 잘 예측할 수 없다. 안드의 최신 컬렉션 라이브러리가 성능이 더 좋은 거 아닐까? 재밌는 주제. 그런데 자료형 구현의 성능이 그렇게 아주 큰 차이는 나지 않을 것으로 예상됨.</li>
-<li>성능은 자바보다 약 5% 정도 떨어진다. 이 정도 차이는 최적화로 따라잡기 쉽지 않은 차이긴 하지만, 생산성 증가가 워낙 높고, 파이썬 등과 비교하면 대단히 성능이 높기 때문에 충분히 괜찮은 정도라고 생각한다.</li>
-<li>js로 변환 가능, js(canvas)도. DOM 셀렉터, 크리에이터 등 DOM 관련 기능이 표준라이브러리에 포함되어 있다.</li>
-</ul>
+<h1 id="Structural_Type_System_VS-_Nominal_Type_System">Structural Type System VS. Nominal Type System</h1><p>다시 Functional Interface로 돌아가서, Functional Interface는 말 그대로 Interface다. 다른 Interface와의 차이점은 이것이 함수형을 지원하기 위한 용도로 쓰기 위해 특별히 <code>@FunctionalInterface</code>라는 annotation을 달았다는 점이다. 이것은 해당 Interface가 단 하나의 abstract method를 가졌는지 체크해준다. 따라서 이 annotation이 없더라도 조건만 맞는다면 Functional Interface의 목적으로 쓰일 수 있다. 단 하나의 abstract method라고 제한하는 것은 Functional Interface가 Java 8의 Lambda expression의 Interface가 될 수 있도록 한다. 또한 abstract method만 제한되었기 때문에 Interface의 static method와 default method는 제한되지 않는다. 여기까지는 좋다. 그런데 이게 왜 필요할까?</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SampleFunctionalInterface</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span></span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method1</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method2</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">method3</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">method4</span><span class="params">()</span> </span>&#123; ... &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>scala나 kotlin 등의 언어들은 구조적인 함수 타입(Structural type system)을 허용한다. 바로 예제를 보자.</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// scala 예제</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">structuralTypeSystemMethod</span> (</span><span class="type">A</span> : <span class="type">Int</span> =&gt; <span class="type">Int</span>) : <span class="type">Int</span> =&gt; <span class="type">Int</span> = <span class="type">A</span></span><br></pre></td></tr></table></figure>
+<p>내 생각에는 무척 이해하기 쉬운 표기 같다. 이를 그대로 Java적으로 표현하면 어떻게 될까?</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 경고 : 이러한 문법은 Java 8에서는 쓸 수 없습니다. 단순한 예시.</span></span><br><span class="line">Integer -&gt; <span class="function">Integer <span class="title">structuralTypeSystemMethod</span> <span class="params">(Integer -&gt; Integer A)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> A;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>:</code> 기호가 빠지면서 약간 난해해지기는 했지만 아직 괜찮은 것 같다. 이해하기 나쁘지 않다. Integer를 받아서 Integer를 리턴하는 함수를 받아서 Integer를 받아서 Integer를 리턴하는 함수를 리턴한다. IDE가 syntax color만 잘 분류해주면 문제가 없어보인다.(정말?)</p>
+<p>그러나 불행하게도 이 문법은 Java에서는 아직 실제로 사용할 수 없다. 아직이라고는 했지만 영영 사용하지 못할 수도 있다. 그럼 진짜 Java는 어떻게 이 함수를 표현할까?</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Function&lt;Integer, Integer&gt; nominalTypeSystemMethod (Function&lt;Integer, Integer&gt; A) &#123;</span><br><span class="line">  <span class="keyword">return</span> A;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>이제 <code>Function&lt;T, R&gt;</code> 이라는 새로운 Functional Interface를 배워야하게 생겼다. scala의 Structural type system에 비하면 매우 귀찮다. 이러한 표기 방식을 <strong>Nominal type system</strong>이라 한다. 더 정확하게 말하자면 Java는 원래부터 Nominal type system을 써왔고 function을 1st-class citizen으로 만들고자 고민하면서도 이것을 유지하는 방법을 선택한 것이다.</p>
+<p>Nominal type system은 프로그래밍에 쓰이는 타입 시스템에서 가장 대중적인 시스템일 것이다. 이는 어떤 데이터의 타입이 명시적 선언에 의해 결정되는 시스템이다. 그 이점은 하나의 타입이 다른 타입과 같은 지 다른 지, 혹은 하나의 타입이 다른 타입의 서브 타입인지 아닌지 구별하기에 용이하기에 비교적 더 <em>안전</em>할 수 있다. 올해로 20년이 된 Java는 많은 환경에서 이용되어 오고 있으며 타입 시스템의 변화는 하위 호환성에 큰 영향을 미칠 수 있기 때문에 Lambda 식을 넣으면서도 타입 시스템을 유지한 보수적인 선택으로 생각된다.</p>
+<p>어쨌든 덕분에 기억해둬야 할 Functional Interface가 꽤 많다. T 타입을 인자로 받아서 R 타입을 반환하는 <code>Function&lt;T, R&gt;</code>, 인자도 없고 반환도 없는 <code>Runnable</code>, 인자가 없이 T 타입을 반환하는 <code>Supplier&lt;T&gt;</code>, T 타입 인자를 받아서 반환을 하지 않는 <code>Consumer&lt;T&gt;</code> 같이 제네릭 함수 타입부터 int, long, double, boolean 등에 특화된 <code>IntPredicate</code>나 <code>LongFunction&lt;R&gt;</code> 같은 것들까지 수십 여종이다(대충 세어보기로는 43종을 발견했다.. 개인이 만들 수도 있기 때문에 당연하게도 얼마든지 늘어날 수 있다). 심지어 이들이 가진 abstract method의 이름도 다르다(…!, 물론 IDE가 우리를 구원하리라).</p>
+<p>그럼에도 불구하고 이들 Functional Interface를 배우고 써야하는 것은 이들이 가진 목적성에 특화된 default method들의 유용성과 고차 함수의 유용성이 포기하기 쉽지 않기 때문이다.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://hwiba.github.io/blog/2015/10/07/kotlin-세미나-필기/" data-id="cigfbzkhq000ribfvf1wv4gb1" class="article-share-link">Share</a>
+      <a data-url="http://hwiba.github.io/blog/2015/10/12/Java-8-Functional-Interface-Nominal-typing/" data-id="cigkh02w50023h0fvd6sf9oby" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/kotlin/">kotlin</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/세미나/">세미나</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Java-8/">Java 8</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/functional-interface/">functional interface</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/type/">type</a></li></ul>
 
     </footer>
   </div>
@@ -135,7 +122,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/blog/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/6/">6</a><a class="page-number" href="/blog/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/blog/page/9/">9</a><a class="page-number" href="/blog/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/12/">12</a><a class="extend next" rel="next" href="/blog/page/9/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/blog/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/6/">6</a><a class="page-number" href="/blog/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/blog/page/9/">9</a><a class="page-number" href="/blog/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/13/">13</a><a class="extend next" rel="next" href="/blog/page/9/">Next &raquo;</a>
     </nav>
   
 </section>
@@ -148,7 +135,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jspm/">jspm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/react/">react</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/uglifyjs/">uglifyjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/brew/">brew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/intellij/">intellij</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jspm/">jspm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/plugin/">plugin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/react/">react</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/uglifyjs/">uglifyjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -157,7 +144,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 12.5px;">Java 8</a> <a href="/blog/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/blog/tags/error/" style="font-size: 10px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/jspm/" style="font-size: 10px;">jspm</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/uglifyjs/" style="font-size: 10px;">uglifyjs</a> <a href="/blog/tags/세미나/" style="font-size: 17.5px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 12.5px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 15px;">프론트엔드</a>
+      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 12.5px;">Java 8</a> <a href="/blog/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/blog/tags/brew/" style="font-size: 10px;">brew</a> <a href="/blog/tags/error/" style="font-size: 10px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/intellij/" style="font-size: 10px;">intellij</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/jspm/" style="font-size: 10px;">jspm</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/plugin/" style="font-size: 10px;">plugin</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/uglifyjs/" style="font-size: 10px;">uglifyjs</a> <a href="/blog/tags/세미나/" style="font-size: 17.5px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 12.5px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 15px;">프론트엔드</a>
     </div>
   </div>
 
@@ -166,7 +153,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/11/">November 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -176,6 +163,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog/2015/11/04/Error-scalac-Multiple-scala-library-jar/">Error:scalac: Multiple &#39;scala-library*.jar&#39;</a>
+          </li>
         
           <li>
             <a href="/blog/2015/11/01/jspm-react-uglifyjs로-front-end-환경-세팅하기/">jspm, react, uglifyjs로 front end 환경 세팅하기</a>
@@ -191,10 +182,6 @@
         
           <li>
             <a href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-작은-회사에서-개자이너로-일하기/">Next 웹 프론트엔드 세미나, 작은 회사에서 개자이너로 일하기.</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-그거-좀-쓰면-더-좋냐/">Next 웹 프론트엔드 세미나, 그거 좀 쓰면 더 좋냐?</a>
           </li>
         
       </ul>

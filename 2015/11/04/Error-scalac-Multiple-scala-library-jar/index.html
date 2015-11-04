@@ -3,17 +3,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: jspm | Force Push</title>
+  <title>Error:scalac: Multiple &#39;scala-library*.jar&#39; | Force Push</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Force Push">
-<meta property="og:url" content="http://hwiba.github.io/blog/tags/jspm/index.html">
+  <meta name="description" content="1Error:scalac: Multiple &apos;scala-library*.jar&apos; files (scala-library.jar, scala-library.jar) in Scala compiler classpath in Scala SDK scala-sdk-2.11.7`
+OSX에서 intellij + scala + springboot + scalatest를 시도">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Error:scalac: Multiple 'scala-library*.jar'">
+<meta property="og:url" content="http://hwiba.github.io/blog/2015/11/04/Error-scalac-Multiple-scala-library-jar/index.html">
 <meta property="og:site_name" content="Force Push">
-<meta property="og:description">
+<meta property="og:description" content="1Error:scalac: Multiple &apos;scala-library*.jar&apos; files (scala-library.jar, scala-library.jar) in Scala compiler classpath in Scala SDK scala-sdk-2.11.7`
+OSX에서 intellij + scala + springboot + scalatest를 시도">
+<meta property="og:updated_time" content="2015-11-04T07:16:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Force Push">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Error:scalac: Multiple 'scala-library*.jar'">
+<meta name="twitter:description" content="1Error:scalac: Multiple &apos;scala-library*.jar&apos; files (scala-library.jar, scala-library.jar) in Scala compiler classpath in Scala SDK scala-sdk-2.11.7`
+OSX에서 intellij + scala + springboot + scalatest를 시도">
   
   
     <link rel="icon" href="/favicon.png">
@@ -59,39 +63,60 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/blog/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/blog/2015/11/01/jspm-react-uglifyjs로-front-end-환경-세팅하기/" class="archive-article-date">
-  <time datetime="2015-10-31T15:51:38.000Z" itemprop="datePublished">Nov 1</time>
+        <section id="main"><article id="post-Error-scalac-Multiple-scala-library-jar" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/blog/2015/11/04/Error-scalac-Multiple-scala-library-jar/" class="article-date">
+  <time datetime="2015-11-04T07:08:57.000Z" itemprop="datePublished">2015-11-04</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/blog/2015/11/01/jspm-react-uglifyjs로-front-end-환경-세팅하기/">jspm, react, uglifyjs로 front end 환경 세팅하기</a>
+    <h1 class="article-title" itemprop="name">
+      Error:scalac: Multiple &#39;scala-library*.jar&#39;
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error:scalac: Multiple <span class="string">'scala-library*.jar'</span> files (scala-library.jar, scala-library.jar) <span class="keyword">in</span> Scala compiler classpath <span class="keyword">in</span> Scala SDK scala-sdk-<span class="number">2.11</span>.<span class="number">7</span>`</span><br></pre></td></tr></table></figure>
+<p>OSX에서 intellij + scala + springboot + scalatest를 시도하면서 scalatest를 돌리려 하자 이런 에러를 만날 수 있었다. 이는 brew로 설치한 scala-library를 프로젝트에 global SDK로 추가하면서 나타난 걸로 생각되는데, intellij의 Project Structure에서 경로를 확인해보니 이렇다.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/Cellar/scala/</span><br></pre></td></tr></table></figure>
+<p>이걸 다음과 같이 변경하자.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/opt/scala/idea</span><br></pre></td></tr></table></figure>
+<p>이걸로 문제 해결.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://hwiba.github.io/blog/2015/11/04/Error-scalac-Multiple-scala-library-jar/" data-id="cigkh02sb0000h0fvo06subsp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/brew/">brew</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/intellij/">intellij</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/plugin/">plugin</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/scala/">scala</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog/2015/11/01/jspm-react-uglifyjs로-front-end-환경-세팅하기/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">jspm, react, uglifyjs로 front end 환경 세팅하기</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
 </section>
         
           <aside id="sidebar">
