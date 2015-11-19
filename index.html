@@ -84,7 +84,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>며칠 전 spring boot 1.3.0이 릴리즈 되면서 1.2.7 버전으로 진행 중이던 프로젝트를 업데이트하기로 결정했다. 개인 프로젝트이기 때문에 쉬운 결정이었지만 spring security 관련해서 사용중이던 api가 deprecated된 것을 발견했다. 고쳐야 하는데, 배포까지는 한참 멀었으므로 급한 이슈는 아니라고 생각되어 일단 내버려두고 spring boot 1.3.0에서 추가된 기능들을 살펴보기로 했다.</p>
-<p>많은 기능 추가가 있었지만[] 얼핏 보았을 때 내 눈에 띈 기능은 다음과 같다.</p>
+<p>많은 기능 추가가 있었지만 얼핏 보았을 때 내 눈에 띈 기능은 다음과 같다.</p>
 <pre><code><span class="number">1</span>. actuator에 <span class="keyword">end</span> point로 /flyway가 추가되었다.
 <span class="number">2</span>. <span class="variable">@WebServlet</span>, <span class="variable">@WebFilter</span>, <span class="variable">@WebListener</span> 지원.
 <span class="number">3</span>. spring-boot-devtools 추가
@@ -98,6 +98,7 @@
 <p><strong>Automatic application restarts</strong>는  static, template, classPath에 위치한 파일들의 저장 -&gt; 변경을 확인하여 변경사항이 있는 내용만 재컴파일을 적용하므로서 재실행 시간을 아껴주는 기능으로 보인다. spring loaded를 내장한 걸로 보이는데, 빌드 성능이 떨어지는 구형 맥북에어를 사용하고 있어 이 기능에 주로 관심이 많이 간다.</p>
 <p>간단한 테스트로 method의 내용 변경, method의 제거를 해보았지만 기대대로 잘 동작되고 이 정도만 해도 도움이 적지 않으므로 일단 적용부터하고 적용 가능한 범위에 대해서 더 알아봐야겠다.</p>
 <p>eclipse에서는 파일의 저장을 trigger로 해서 동작하지만 intellij에서는 build -&gt; Make project를 통해야 같은 결과를 얻을 수 있으므로 <code>cmd + F9</code>를 자주 찾게 될 듯.</p>
+<p>만약 특정 경로 상의 파일들은 자동 갱신을 원하지 않는다면 다음 설정을 application.properties에 추가한다.</p>
 <p><code>spring.devtools.restart.exclude=static/**,template/**</code></p>
 <hr>
 <p>참고 : <a href="http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#using-boot-devtools" target="_blank" rel="external">http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#using-boot-devtools</a></p>
@@ -105,7 +106,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://hwiba.github.io/blog/2015/11/18/Spring-boot-1-3-0의-spring-boot-devtools/" data-id="cih4jb1gv001qu3fvc712sfau" class="article-share-link">Share</a>
+      <a data-url="http://hwiba.github.io/blog/2015/11/18/Spring-boot-1-3-0의-spring-boot-devtools/" data-id="cih5rv6ba001q6dfv3kow92ad" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/eclipse/">eclipse</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/intellij/">intellij</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/spring-boot/">spring boot</a></li></ul>
