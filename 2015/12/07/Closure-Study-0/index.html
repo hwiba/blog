@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Force Push</title>
+  <title>Closure Study (0) | Force Push</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Force Push">
-<meta property="og:url" content="http://hwiba.github.io/blog/page/6/index.html">
+  <meta name="description" content="수 일 전, 판교 H 스퀘어에 위치한 카카오의 한 회의실에서 Closure Pangyo Study를 진행한다는 소식을 듣고 바로 등록했다. Clojure는 jvm에서 실행 가능한 Lisp의 변종으로 Spring, Java로 웹 개발을 진행하는 내게는 어디는 써봤더라, 좋았더라 등 간간히 소문만 들리며 호기심을 자극하는 신비의 존재였다. 때문에 Closure">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Closure Study (0)">
+<meta property="og:url" content="http://hwiba.github.io/blog/2015/12/07/Closure-Study-0/index.html">
 <meta property="og:site_name" content="Force Push">
-<meta property="og:description">
+<meta property="og:description" content="수 일 전, 판교 H 스퀘어에 위치한 카카오의 한 회의실에서 Closure Pangyo Study를 진행한다는 소식을 듣고 바로 등록했다. Clojure는 jvm에서 실행 가능한 Lisp의 변종으로 Spring, Java로 웹 개발을 진행하는 내게는 어디는 써봤더라, 좋았더라 등 간간히 소문만 들리며 호기심을 자극하는 신비의 존재였다. 때문에 Closure">
+<meta property="og:updated_time" content="2015-12-07T08:55:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Force Push">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Closure Study (0)">
+<meta name="twitter:description" content="수 일 전, 판교 H 스퀘어에 위치한 카카오의 한 회의실에서 Closure Pangyo Study를 진행한다는 소식을 듣고 바로 등록했다. Clojure는 jvm에서 실행 가능한 Lisp의 변종으로 Spring, Java로 웹 개발을 진행하는 내게는 어디는 써봤더라, 좋았더라 등 간간히 소문만 들리며 호기심을 자극하는 신비의 존재였다. 때문에 Closure">
   
   
     <link rel="icon" href="/favicon.png">
@@ -59,12 +60,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-gitError-pathscpec-src-did-not-match-any-file-s-known-to-git" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Closure-Study-0" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2015/10/24/gitError-pathscpec-src-did-not-match-any-file-s-known-to-git/" class="article-date">
-  <time datetime="2015-10-23T15:12:50.000Z" itemprop="datePublished">2015-10-24</time>
+    <a href="/blog/2015/12/07/Closure-Study-0/" class="article-date">
+  <time datetime="2015-12-07T08:25:10.000Z" itemprop="datePublished">2015-12-07</time>
 </a>
     
   </div>
@@ -74,8 +73,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/blog/2015/10/24/gitError-pathscpec-src-did-not-match-any-file-s-known-to-git/">gitError: pathscpec &#39;src/...&#39; did not match any file(s) known to git.</a>
+    <h1 class="article-title" itemprop="name">
+      Closure Study (0)
     </h1>
   
 
@@ -83,33 +82,34 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>intellij에서 github에 commit&amp;push를 한번에 날리면</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">error</span>: pathspec 'src/main/java/… …</span><br><span class="line">…/controller/HomeController.java' did <span class="keyword">not</span> match any <span class="type">file</span>(s) known <span class="keyword">to</span> git.</span><br></pre></td></tr></table></figure>
-<p>이런 에러가 나타나기 시작했다. 정확하게 어떤 이유인지는 모르겠지만 intellij에서 git commit을 수동으로 먼저하고 push를 하면 무시하고 지나가는 이상함을 보였는데 수동이랑 자동에 어떤 차이가 있단 말인가?</p>
-<p>일단 당장 몹시 귀찮은 문제이므로 파고들기보다는 해결부터 하기로 했다.</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git mv originPath<span class="class">.file</span> newPath<span class="class">.file</span></span><br><span class="line">git commit -m <span class="string">"escape pathspec error"</span></span><br><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
-<p>git repository의 기록된 저장소와 다르다고 나타나는 문제인데 나타나면 다 나타날 것이지 왜 하나의 파일에서만 이런 일이 발생하는지 잘 모르겠지만 파일명을 변경한 후 커밋한다던가 하는 간단한 방법으로 벗어날 수 있다.</p>
+        <p>수 일 전, 판교 H 스퀘어에 위치한 카카오의 한 회의실에서 <a href="http://onoffmix.com/event/58413" target="_blank" rel="external">Closure Pangyo Study</a>를 진행한다는 소식을 듣고 바로 등록했다. Clojure는 jvm에서 실행 가능한 Lisp의 변종으로 Spring, Java로 웹 개발을 진행하는 내게는 어디는 써봤더라, 좋았더라 등 간간히 소문만 들리며 호기심을 자극하는 신비의 존재였다. 때문에 Closure를 실무에 적용하고 있는 분에게 5시간 동안 배울 기회는 상당히 귀중했다.</p>
+<p>5일 간 하루 1시간 씩 진행되는 이 스터디의 첫 날은 <a href="https://eunmin.gitbooks.io/clojure-for-beginners/content/index.html" target="_blank" rel="external">이 문서</a>의 클로저 데이터 형식 - 문자열까지 진행이 되었는데, 배운 내용을 베이스로 당분간 포스팅을 진행해보기로 했다. 1시간은 충분히 자세히 배우기는 어려운 탓에 간략하게 넘어가는 부분이 많은데 조금씩 채워보자.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://hwiba.github.io/blog/2015/10/24/gitError-pathscpec-src-did-not-match-any-file-s-known-to-git/" data-id="cihvq146n001qgqfvgrg1xxf4" class="article-share-link">Share</a>
+      <a data-url="http://hwiba.github.io/blog/2015/12/07/Closure-Study-0/" data-id="cihvq143h0000gqfvihp68exw" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/error/">error</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/git/">git</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Closure/">Closure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Lisp/">Lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Study/">Study</a></li></ul>
 
     </footer>
   </div>
   
+    
+<nav id="article-nav">
+  
+  
+    <a href="/blog/2015/11/27/mysql-설정-파일의-우선-순위/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">mysql 설정 파일의 우선 순위</div>
+    </a>
+  
+</nav>
+
+  
 </article>
 
-
-  
-  
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/blog/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/4/">4</a><a class="page-number" href="/blog/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/blog/page/7/">7</a><a class="page-number" href="/blog/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/16/">16</a><a class="extend next" rel="next" href="/blog/page/7/">Next &raquo;</a>
-    </nav>
-  
 </section>
         
           <aside id="sidebar">

@@ -61,10 +61,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-mysql-설정-파일의-우선-순위" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Closure-Study-0" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2015/11/27/mysql-설정-파일의-우선-순위/" class="article-date">
-  <time datetime="2015-11-27T07:34:55.000Z" itemprop="datePublished">2015-11-27</time>
+    <a href="/blog/2015/12/07/Closure-Study-0/" class="article-date">
+  <time datetime="2015-12-07T08:25:10.000Z" itemprop="datePublished">2015-12-07</time>
 </a>
     
   </div>
@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2015/11/27/mysql-설정-파일의-우선-순위/">mysql 설정 파일의 우선 순위</a>
+      <a class="article-title" href="/blog/2015/12/07/Closure-Study-0/">Closure Study (0)</a>
     </h1>
   
 
@@ -83,29 +83,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>MySQL을 실행시킬 때 <code>my.cnf</code>라는 이름의 설정 파일을 사용하게 되는데,  MySQL에서는 이 설정 파일의 위치를 한 곳으로 고정시켜두지 않았다. <code>my.cnf</code>는 여러 곳에 위치할 수 있다. 그러나 그 모든 내용을 읽고 적용시키지는 않는다. 여러 경로에서 가장 먼저 발견되는 <code>my.cnf</code>만 적용되는 것이다.</p>
-<p>왜 이런 식으로 설계되었을까? 뭔가 장점이 있었겠지만 그 히스토리는 일단 넘어가고, 당장 설정하면서 필요한 MySQL이 <code>my.cnf</code>를 찾아낼 수 있는 경로와 그 우선순위를 살펴보자.</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ mysql --help | grep my.cnf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 결과 </span></span><br><span class="line">order of preference, my.cnf, <span class="variable">$MYSQL_TCP_PORT</span>,</span><br><span class="line">/etc/my.cnf /etc/mysql/my.cnf /usr/<span class="built_in">local</span>/etc/my.cnf ~/.my.cnf</span><br></pre></td></tr></table></figure>
-<p><code>mysql client</code>의 <code>-help</code> 옵션으로 많은 것을 알 수 있는데 너무 많아 혼란스러우므로 <code>grep</code>을 사용했다.</p>
-<p>출력된 결과</p>
-<ol>
-<li>/etc/my.cnf</li>
-<li>/etc/mysql/my.cnf</li>
-<li>/usr/local/etc/my.cnf</li>
-<li>~/.my.cnf</li>
-</ol>
-<p>가 곧 MySQL이 설정 파일 <code>my.cnf</code>를 찾는 경로이며 그 우선 순위가 되겠다.</p>
-<p>그런데 4번인 ~/.my.cnf는 다른 것들과 달리 상대 경로에 위치해 있다. 4번의 절대 경로는 어디일까?</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 먼저 MySQL 이 실행되어 있다는 전제 하에,</span></span><br><span class="line">$ ps aux|grep mysql</span><br><span class="line"></span><br><span class="line"><span class="comment"># 결과</span></span><br><span class="line"><span class="number">70920</span>   <span class="number">0.0</span> <span class="number">10.9</span>  <span class="number">3083972</span> <span class="number">456244</span> s000  S     <span class="number">5</span>:<span class="number">04</span>PM   <span class="number">0</span>:<span class="number">00.65</span> /usr/<span class="built_in">local</span>/Cellar/mysql/<span class="number">5.6</span>.<span class="number">27</span>/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/Cellar/mysql/<span class="number">5.6</span>.<span class="number">27</span> --datadir=/usr/<span class="built_in">local</span>/var/mysql --plugin-dir=/usr/<span class="built_in">local</span>/Cellar/mysql/<span class="number">5.6</span>.<span class="number">27</span>/lib/plugin --log-error=/usr/<span class="built_in">local</span>/var/mysql/MacbookAir.local.err --pid-file=/usr/<span class="built_in">local</span>/var/mysql/MacbookAir.local.pid</span><br><span class="line"><span class="number">70824</span>   <span class="number">0.0</span>  <span class="number">0.0</span>  <span class="number">2454888</span>   <span class="number">1272</span> s000  S     <span class="number">5</span>:<span class="number">04</span>PM   <span class="number">0</span>:<span class="number">00.03</span> /bin/sh /usr/<span class="built_in">local</span>/Cellar/mysql/<span class="number">5.6</span>.<span class="number">27</span>/bin/mysqld_safe --datadir=/usr/<span class="built_in">local</span>/var/mysql --pid-file=/usr/<span class="built_in">local</span>/var/mysql/MacbookAir.local.pid</span><br></pre></td></tr></table></figure>
-<p>이 경우 brew로 MySQL을 설치했기 때문에 설치된 MySQL의 경로가 <code>/usr/local/Cellar/mysql/5.6.27</code>가 되었다. 이 위치에서 my.cnf를 발견할 수 있다.</p>
+        <p>수 일 전, 판교 H 스퀘어에 위치한 카카오의 한 회의실에서 <a href="http://onoffmix.com/event/58413" target="_blank" rel="external">Closure Pangyo Study</a>를 진행한다는 소식을 듣고 바로 등록했다. Clojure는 jvm에서 실행 가능한 Lisp의 변종으로 Spring, Java로 웹 개발을 진행하는 내게는 어디는 써봤더라, 좋았더라 등 간간히 소문만 들리며 호기심을 자극하는 신비의 존재였다. 때문에 Closure를 실무에 적용하고 있는 분에게 5시간 동안 배울 기회는 상당히 귀중했다.</p>
+<p>5일 간 하루 1시간 씩 진행되는 이 스터디의 첫 날은 <a href="https://eunmin.gitbooks.io/clojure-for-beginners/content/index.html" target="_blank" rel="external">이 문서</a>의 클로저 데이터 형식 - 문자열까지 진행이 되었는데, 배운 내용을 베이스로 당분간 포스팅을 진행해보기로 했다. 1시간은 충분히 자세히 배우기는 어려운 탓에 간략하게 넘어가는 부분이 많은데 조금씩 채워보자.</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://hwiba.github.io/blog/2015/11/27/mysql-설정-파일의-우선-순위/" data-id="cihhehyr6000ypdfvwwis31ye" class="article-share-link">Share</a>
+      <a data-url="http://hwiba.github.io/blog/2015/12/07/Closure-Study-0/" data-id="cihvq143h0000gqfvihp68exw" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Database/">Database</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/config/">config</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Closure/">Closure</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Lisp/">Lisp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Study/">Study</a></li></ul>
 
     </footer>
   </div>
@@ -116,7 +103,7 @@
   
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><a class="page-number" href="/blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/15/">15</a><a class="extend next" rel="next" href="/blog/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/blog/page/2/">2</a><a class="page-number" href="/blog/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/16/">16</a><a class="extend next" rel="next" href="/blog/page/2/">Next &raquo;</a>
     </nav>
   
 </section>
@@ -129,7 +116,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Database/">Database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/MySQL/">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/brew/">brew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/config/">config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/eclipse/">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/intellij/">intellij</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jspm/">jspm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/plugin/">plugin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/react/">react</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/spring-boot/">spring boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/uglifyjs/">uglifyjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">16</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Closure/">Closure</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Database/">Database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Lisp/">Lisp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/MySQL/">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Study/">Study</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/brew/">brew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/config/">config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/eclipse/">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/intellij/">intellij</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jspm/">jspm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/plugin/">plugin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/react/">react</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/spring-boot/">spring boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/uglifyjs/">uglifyjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -138,7 +125,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Database/" style="font-size: 10px;">Database</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 14px;">Java 8</a> <a href="/blog/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/blog/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog/tags/brew/" style="font-size: 10px;">brew</a> <a href="/blog/tags/config/" style="font-size: 10px;">config</a> <a href="/blog/tags/eclipse/" style="font-size: 10px;">eclipse</a> <a href="/blog/tags/error/" style="font-size: 14px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/intellij/" style="font-size: 12px;">intellij</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/jspm/" style="font-size: 10px;">jspm</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/plugin/" style="font-size: 10px;">plugin</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/uglifyjs/" style="font-size: 10px;">uglifyjs</a> <a href="/blog/tags/세미나/" style="font-size: 18px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 14px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 16px;">프론트엔드</a>
+      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/blog/tags/Database/" style="font-size: 10px;">Database</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 14px;">Java 8</a> <a href="/blog/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/blog/tags/Lisp/" style="font-size: 10px;">Lisp</a> <a href="/blog/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog/tags/Study/" style="font-size: 10px;">Study</a> <a href="/blog/tags/brew/" style="font-size: 10px;">brew</a> <a href="/blog/tags/config/" style="font-size: 10px;">config</a> <a href="/blog/tags/eclipse/" style="font-size: 10px;">eclipse</a> <a href="/blog/tags/error/" style="font-size: 14px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/intellij/" style="font-size: 12px;">intellij</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/jspm/" style="font-size: 10px;">jspm</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/plugin/" style="font-size: 10px;">plugin</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/uglifyjs/" style="font-size: 10px;">uglifyjs</a> <a href="/blog/tags/세미나/" style="font-size: 18px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 14px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 16px;">프론트엔드</a>
     </div>
   </div>
 
@@ -147,7 +134,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/11/">November 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/11/">November 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -157,6 +144,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog/2015/12/07/Closure-Study-0/">Closure Study (0)</a>
+          </li>
         
           <li>
             <a href="/blog/2015/11/27/mysql-설정-파일의-우선-순위/">mysql 설정 파일의 우선 순위</a>
@@ -172,10 +163,6 @@
         
           <li>
             <a href="/blog/2015/11/01/jspm-react-uglifyjs로-front-end-환경-세팅하기/">jspm, react, uglifyjs로 front end 환경 세팅하기</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2015/10/24/gitError-pathscpec-src-did-not-match-any-file-s-known-to-git/">gitError: pathscpec &#39;src/...&#39; did not match any file(s) known to git.</a>
           </li>
         
       </ul>

@@ -61,10 +61,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-Error-scalac-Multiple-scala-library-jar" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Spring-boot-1-3-0의-spring-boot-devtools" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2015/11/04/Error-scalac-Multiple-scala-library-jar/" class="article-date">
-  <time datetime="2015-11-04T07:08:57.000Z" itemprop="datePublished">2015-11-04</time>
+    <a href="/blog/2015/11/18/Spring-boot-1-3-0의-spring-boot-devtools/" class="article-date">
+  <time datetime="2015-11-18T07:29:26.000Z" itemprop="datePublished">2015-11-18</time>
 </a>
     
   </div>
@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2015/11/04/Error-scalac-Multiple-scala-library-jar/">Error:scalac: Multiple &#39;scala-library*.jar&#39;</a>
+      <a class="article-title" href="/blog/2015/11/18/Spring-boot-1-3-0의-spring-boot-devtools/">Spring boot 1.3.0의 spring-boot-devtools</a>
     </h1>
   
 
@@ -83,20 +83,33 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error:scalac: Multiple <span class="string">'scala-library*.jar'</span> files (scala-library.jar, scala-library.jar) <span class="keyword">in</span> Scala compiler classpath <span class="keyword">in</span> Scala SDK scala-sdk-<span class="number">2.11</span>.<span class="number">7</span>`</span><br></pre></td></tr></table></figure>
-<p>OSX에서 intellij + scala + springboot + scalatest를 시도하면서 scalatest를 돌리려 하자 이런 에러를 만날 수 있었다. 이는 brew로 설치한 scala-library를 프로젝트에 global SDK로 추가하면서 나타난 걸로 생각되는데, intellij의 Project Structure에서 경로를 확인해보니 이렇다.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/Cellar/scala/</span><br></pre></td></tr></table></figure>
-<p>이걸 다음과 같이 변경하자.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/opt/scala/idea</span><br></pre></td></tr></table></figure>
-<p>이걸로 문제 해결.</p>
+        <p>며칠 전 spring boot 1.3.0이 릴리즈 되면서 1.2.7 버전으로 진행 중이던 프로젝트를 업데이트하기로 결정했다. 개인 프로젝트이기 때문에 쉬운 결정이었지만 spring security 관련해서 사용중이던 api가 deprecated된 것을 발견했다. 고쳐야 하는데, 배포까지는 한참 멀었으므로 급한 이슈는 아니라고 생각되어 일단 내버려두고 spring boot 1.3.0에서 추가된 기능들을 살펴보기로 했다.</p>
+<p>많은 기능 추가가 있었지만 얼핏 보았을 때 내 눈에 띈 기능은 다음과 같다.</p>
+<pre><code><span class="number">1</span>. actuator에 <span class="keyword">end</span> point로 /flyway가 추가되었다.
+<span class="number">2</span>. <span class="variable">@WebServlet</span>, <span class="variable">@WebFilter</span>, <span class="variable">@WebListener</span> 지원.
+<span class="number">3</span>. spring-boot-devtools 추가
+</code></pre><p>다른 주제들보다 먼저 spring-boot-devtools를 살펴보기로 했다. <a href="http://spring.io/blog/2015/11/16/spring-boot-1-3-0-released" target="_blank" rel="external">spring.io의 소개 문구</a>는 다음과 같다.</p>
+<blockquote>
+<p>Developer Tools</p>
+<p>A new spring-boot-devtools module has been added which aims to improve the development-time experience. The module provides:</p>
+<p>Sensible property defaults (for example disabling template caches)<br>Automatic application restarts<br>LiveReload support<br>Remote development support (including remote updates and remote debug via an HTTP tunnel).<br>Persistent HTTP sessions across restarts</p>
+</blockquote>
+<p><strong>template caches</strong> 관련해서는 application.properties의 <code>spring.thymeleaf.cache</code>를 false로 하는 것과 같은 맥락으로 생각되고,</p>
+<p><strong>Automatic application restarts</strong>는  static, template, classPath에 위치한 파일들의 저장 -&gt; 변경을 확인하여 변경사항이 있는 내용만 재컴파일을 적용하므로서 재실행 시간을 아껴주는 기능으로 보인다. spring loaded를 내장한 걸로 보이는데, 빌드 성능이 떨어지는 구형 맥북에어를 사용하고 있어 이 기능에 주로 관심이 많이 간다.</p>
+<p>간단한 테스트로 method의 내용 변경, method의 제거를 해보았지만 기대대로 잘 동작되고 이 정도만 해도 도움이 적지 않으므로 일단 적용부터하고 적용 가능한 범위에 대해서 더 알아봐야겠다.</p>
+<p>eclipse에서는 파일의 저장을 trigger로 해서 동작하지만 intellij에서는 build -&gt; Make project를 통해야 같은 결과를 얻을 수 있으므로 <code>cmd + F9</code>를 자주 찾게 될 듯.</p>
+<p>만약 특정 경로 상의 파일들은 자동 갱신을 원하지 않는다면 다음 설정을 application.properties에 추가한다.</p>
+<p><code>spring.devtools.restart.exclude=static/**,template/**</code></p>
+<hr>
+<p>참고 : <a href="http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#using-boot-devtools" target="_blank" rel="external">http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#using-boot-devtools</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://hwiba.github.io/blog/2015/11/04/Error-scalac-Multiple-scala-library-jar/" data-id="cihhehyov0000pdfvibhqunoe" class="article-share-link">Share</a>
+      <a data-url="http://hwiba.github.io/blog/2015/11/18/Spring-boot-1-3-0의-spring-boot-devtools/" data-id="cihvq146u001vgqfvtovvbjzj" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/brew/">brew</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/error/">error</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/intellij/">intellij</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/plugin/">plugin</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/scala/">scala</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/eclipse/">eclipse</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/intellij/">intellij</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/spring-boot/">spring boot</a></li></ul>
 
     </footer>
   </div>
@@ -107,7 +120,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/blog/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/blog/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog/page/4/">4</a><a class="page-number" href="/blog/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/15/">15</a><a class="extend next" rel="next" href="/blog/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/blog/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/blog/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/blog/page/4/">4</a><a class="page-number" href="/blog/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/16/">16</a><a class="extend next" rel="next" href="/blog/page/4/">Next &raquo;</a>
     </nav>
   
 </section>
@@ -120,7 +133,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">15</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Database/">Database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/MySQL/">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/brew/">brew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/config/">config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/eclipse/">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/intellij/">intellij</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jspm/">jspm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/plugin/">plugin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/react/">react</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/spring-boot/">spring boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/uglifyjs/">uglifyjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">16</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Closure/">Closure</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Database/">Database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Lisp/">Lisp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/MySQL/">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Study/">Study</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/brew/">brew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/config/">config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/eclipse/">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/intellij/">intellij</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jspm/">jspm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/plugin/">plugin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/react/">react</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/spring-boot/">spring boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/uglifyjs/">uglifyjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -129,7 +142,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Database/" style="font-size: 10px;">Database</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 14px;">Java 8</a> <a href="/blog/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/blog/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog/tags/brew/" style="font-size: 10px;">brew</a> <a href="/blog/tags/config/" style="font-size: 10px;">config</a> <a href="/blog/tags/eclipse/" style="font-size: 10px;">eclipse</a> <a href="/blog/tags/error/" style="font-size: 14px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/intellij/" style="font-size: 12px;">intellij</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/jspm/" style="font-size: 10px;">jspm</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/plugin/" style="font-size: 10px;">plugin</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/uglifyjs/" style="font-size: 10px;">uglifyjs</a> <a href="/blog/tags/세미나/" style="font-size: 18px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 14px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 16px;">프론트엔드</a>
+      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/blog/tags/Database/" style="font-size: 10px;">Database</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 14px;">Java 8</a> <a href="/blog/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/blog/tags/Lisp/" style="font-size: 10px;">Lisp</a> <a href="/blog/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog/tags/Study/" style="font-size: 10px;">Study</a> <a href="/blog/tags/brew/" style="font-size: 10px;">brew</a> <a href="/blog/tags/config/" style="font-size: 10px;">config</a> <a href="/blog/tags/eclipse/" style="font-size: 10px;">eclipse</a> <a href="/blog/tags/error/" style="font-size: 14px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/intellij/" style="font-size: 12px;">intellij</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/jspm/" style="font-size: 10px;">jspm</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/plugin/" style="font-size: 10px;">plugin</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/uglifyjs/" style="font-size: 10px;">uglifyjs</a> <a href="/blog/tags/세미나/" style="font-size: 18px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 14px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 16px;">프론트엔드</a>
     </div>
   </div>
 
@@ -138,7 +151,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/11/">November 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/11/">November 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -148,6 +161,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog/2015/12/07/Closure-Study-0/">Closure Study (0)</a>
+          </li>
         
           <li>
             <a href="/blog/2015/11/27/mysql-설정-파일의-우선-순위/">mysql 설정 파일의 우선 순위</a>
@@ -163,10 +180,6 @@
         
           <li>
             <a href="/blog/2015/11/01/jspm-react-uglifyjs로-front-end-환경-세팅하기/">jspm, react, uglifyjs로 front end 환경 세팅하기</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2015/10/24/gitError-pathscpec-src-did-not-match-any-file-s-known-to-git/">gitError: pathscpec &#39;src/...&#39; did not match any file(s) known to git.</a>
           </li>
         
       </ul>
