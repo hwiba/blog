@@ -61,10 +61,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-kotlin-세미나-필기" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2015/10/07/techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr/" class="article-date">
-  <time datetime="2015-10-07T13:29:30.000Z" itemprop="datePublished">2015-10-07</time>
+    <a href="/blog/2015/10/07/kotlin-세미나-필기/" class="article-date">
+  <time datetime="2015-10-07T13:30:04.000Z" itemprop="datePublished">2015-10-07</time>
 </a>
     
   </div>
@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2015/10/07/techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr/">techPlanet2015 필기 : Fast and Beautiful: Serving High Quality Photos at Scale on Flickr</a>
+      <a class="article-title" href="/blog/2015/10/07/kotlin-세미나-필기/">kotlin 세미나 필기</a>
     </h1>
   
 
@@ -86,75 +86,45 @@
         <blockquote>
 <p>경고 : 이 문서는 오타수정을 포함해 정리를 하지 않은 필기로 잘못 들었거나 잘못 이해했거나 기타 등등 잘못된 내용이 얼마든지 많이 포함되어 있을 수 있습니다.</p>
 </blockquote>
-<p> 스피커 : Hugo Haas(flickr, yahoo)</p>
-<h2 id="what_does_beautiful_mean?">what does beautiful mean?</h2><ul>
-<li>다양한 디스플레이에서, 다양한 압축 기법으로 만든 사진을 여러 사진 작가들에게 보여주고 두 개의 사진을 두었을 때 둘이 같은가 다른가를 조사함.</li>
+<p>발표자 : 익명 처리함…</p>
+<ul>
+<li>특기 사항 : 코틀린보다는 스칼라+스파크+제플린을 더 좋아함.</li>
+<li>안드로이드에서 잘 맞음.</li>
+<li>jvm에서 돌아가는 언어로서 자바와 호환됨.</li>
+<li>intellij에 to Kotlin 기능이 있음.</li>
+<li>정적 타입 언어.</li>
+<li>안드로이드는 공식적으로 java 6까지만 지원함.</li>
+<li>달빅 vm은 method 갯수 제한이 있다. 약 6.5만개. 큼직한 라이브러리, jodaTime, guava 등이 각각 1만개 근처이므로 큼직한 라이브러리 몇 개만 넣어도 뭘 할 수가 없다.</li>
+<li>스칼라를 안드로이드에서 쓰려는 시도도 있었지만 스칼라 자체가 거대한 라이브러리로(메서드 약 5만개) 구성되어 있어서 안드로이드에 직접 쓰기는 몹시 부담이 된다.</li>
+<li>때문에 간결하면서 유려하고 모던한 새 언어의 필요가 있어 코틀린이 탄생함.</li>
 </ul>
-<h2 id="what_does_fast_mean?">what does fast mean?</h2><ul>
-<li>어플리케이션을 빠르게 만들기 위해 하는 고민.</li>
-<li>스크린 렌더링이 얼마나 빠르게?</li>
-<li>스크롤 프레임은 얼마나?</li>
-<li>사진을 얼마나 빠르게 로딩?</li>
-<li>etc…</li>
-<li>유저 인터랙션에서 어떤 뎁스로?</li>
-</ul>
-<h2 id="challenges_:_designs_are_more_immersive">challenges : designs are more immersive</h2><pre><code>-<span class="ruby"> 과거 <span class="symbol">:</span> 작은 썸네일, 넓은 빈 공간.
-</span>-<span class="ruby"> 현재<span class="symbol">:</span> 큰 썸네일, 거의 남지 않는 빈 공간. 이는 가능한 스크린을 전체적으로 활용하여 서비스를 표현. 이를 위해 픽셀이 더 요구되었다. 실제 장비가 많이 발전했다.</span>
-</code></pre><h2 id="…but_bandwidth_is_very_disparate_and_not_as_high">…but bandwidth is very disparate and not as high</h2><p>Akamai 414 Asia mobile에 따르면, 픽셀의 증가와 비교하여 대역폭이 충분하지 않다. 적절히 대역폭이 발달하지 않고 있다. 그럼에도 불구하고 유저들의 요구사항은 증가하고 있다.</p>
-<h2 id="Instrument_all_the_layers">Instrument all the layers</h2><ul>
-<li>각 레이어들에 대해 이해하고 측정할 필요가 있다. 수집된 정보를 통해 분석한다.</li>
-<li>최악의 경우, 평균, 최고의 경우</li>
-<li>커넥션이 좋을 때, 나쁠 때.</li>
-<li>지리학적으로는 어떤지?</li>
-<li>다운로드 속도와 렌더링 속도</li>
-<li>처음 byte와 최후의 byte</li>
-<li>등… 여러가지 데이터로부터 통찰을 얻을 수 있다.</li>
-</ul>
-<h2 id="서버_사이드와_레이턴시">서버 사이드와 레이턴시</h2><ul>
-<li>최적화된 코드라도 디바이스의 변화 등으로 적절하지 않을 수 있다. 현재 빠른 코드인지 최대한 빨리 분석하고, 느려지는 곳이 있다면 개선한다.</li>
-<li>가령 미국에서 한국까지 오는데<ul>
-<li>ssl handshake</li>
-<li>http request  // 여기까지가 500+ ms 걸림.</li>
-<li>server side processing // 시간이 걸리긴 하지만 영향력이 적음.</li>
-<li>data transmission // 여기도 많이 느림. 가장 느림.</li>
-<li>이런 케이스에는 느리진 부분 이전을 개선해봐야 (15% 향상) 유저에게는 5% 미만의 체감을 느끼게 됨.</li>
-<li>바이트를 낮춰서 보내자는 계획.</li>
-<li>flickr는 진전을 보아서 절반의 크기(데이터 사이즈)로 같은 수준(유저를 대상으로 분석한)을 유지할 수 있음. </li>
-<li>그러나 이 압축에 많은 비용이 든다. 때문에 미리 S, M, L 사이즈로 미리 이미지를 압축해둔다.</li>
-</ul>
-</li>
-</ul>
-<h2 id="the_importance_of_latency">the importance of latency</h2><ul>
-<li>과거 360kB를 전송할 때 3.7s 걸렸는데, 다음해 120kB를 보냈을 때 2.9s가 걸리는 걸 발견했다.</li>
-<li>이미지 데이터 사이즈를 줄이는게 의미가 있지만, 이것이 실제 속도에 미치는 영향은 일정한 정도에 수렴한다. 이는 latency 때문이다.</li>
-<li>이미지를 아무리 줄여야봐야 물리적인 거리에 의해 일정한 정도에서 한계가 발생한다. 따라서 물리적으로 실 사용자의 디바이스에 가까워질 필요가 있었다.</li>
-</ul>
-<h2 id="It’s_hard_to_replicate_15B_images_globally">It’s hard to replicate 15B images globally</h2><ul>
-<li>유저가 어느 지역의 인물이라고 해서 그의 관심사가 같은 지역에 묶일지 알 수 없다.</li>
-<li>Regional cache를 Image store와 유저 사이에 둠으로서 로드 타임을 줄일 수 있다.</li>
-</ul>
-<h2 id="더_개선할_수_있는가?">더 개선할 수 있는가?</h2><ul>
-<li>클라이언트에서 더 개선해야 한다. 기본적으로 치팅. 이는 예측을 의미.</li>
-<li>사진을 보여준 다음 무엇을 어떻게 할 것인가?</li>
-<li>앞, 뒤 이미지를 보여줄 것인가? 등</li>
-<li>유저의 다음 행동을 예상하고, 미리 예상되는 이미즈를 로딩함으로서 스마트한 클라이언트를 만든다.</li>
-<li>로컬 캐시를 활용하여 더 빠르게 한다.</li>
-<li>opportunistic prefetching</li>
-<li>이것들을 통해 50~70%를 개선할 수 있다.</li>
-<li>하지만 너무 aggressively하게 할 필요는 없다. 사용자들의 대역폭이 제한적인데 너무 많은 대역을 쓰거나, 등 사용자의 자원의 한계가 있으므로 싫어할 수 있다.</li>
-</ul>
-<h2 id="질문_답변-">질문 답변.</h2><ul>
-<li>해보지는 않았지만, 좀 더 영리하게 생각해볼 때, 이미지가 여러 사이즈가 있다. 이 중 썸네일로 쓴 작은 이미지를 먼저 보여주고 더 큰 이미지를 보여주는 순서로 사용한다면 유저가 더 빠르게 보이는 걸로 느낄 수 있을 것 같다.</li>
-<li>flickr에서 선호하는 포맷은? jpeg을 선호해왔으며, 더 큰 이미지를 써야할 때가 있었는데 다른 포맷들을 써보고 있지만 클라이언트의 지원 문제로 다시 jpeg으로 돌아가고는 한다.</li>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data <span class="class"><span class="keyword">class</span> <span class="title">customer</span></span>(<span class="variable"><span class="keyword">val</span> name</span>: String, <span class="variable"><span class="keyword">val</span> email</span>: String, <span class="variable"><span class="keyword">val</span> company</span>: String)</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">val</span> psitiveNumbers</span> = list.filter &#123; it &gt; <span class="number">0</span> &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">object</span> ThisIsASingleton &#123;</span><br><span class="line">  <span class="variable"><span class="keyword">val</span> companyName</span> : String = “testname”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable"><span class="keyword">var</span> output</span> : String</span><br><span class="line">output = <span class="literal">null</span> <span class="comment">// 코틀린의 타입은 래퍼이기 때문에 String type이면서 동시에 값이 null일 수 있다. ?와 !!로 제어 가능.</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">calculateTotal</span><span class="params">(obj: <span class="typename">Any</span>)</span> &#123;</span></span><br><span class="line">  <span class="keyword">if</span> (obj <span class="keyword">is</span> Invoice) &#123;</span><br><span class="line">    obj.calculateTotal()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//is 문은 타입 검사며, 이 문 안에서는 자동으로 타입 캐스팅 된다.</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>자바 라이브러리를 직접 사용할 수 있다.</li>
+<li>JavaScript. Write code in Kotlin and target JavaScript to run on Node.js or in browser(자바 스크립트로 컴파일 할 수 있다.)</li>
+<li>컴파일 속도가 가볍고 빠르기 때문에 스칼라와 달리 안드로이드에 매우 적합하지만 그만큼 기능은 적기 때문에 서버에서는 굳이 쓸 이유가 없다.</li>
+<li>안드로이드에서 코틀린을 쓸 때의 장점은 매우 많다. 람다도 쓸 수 있고, 클래스에 익스텐션을 만들 수 있고(기본 타입에 메서드를 추가할 수 있는 것을 의미)</li>
+<li>코틀린 런타입은 1071개, 표준 라이브러리는 약 5000개로 매우 가볍다.</li>
+<li>비트윈이 모든 코드를 코틀린으로 바꾸지는 않았다. 디펜던시 인젝션을 위한 apt, 버터나이프(코틀린 전용으로 래핑한 kotterKnife도 있음.) 라이브러리(스프링에서 어노테이션으로 인젝션 해주는 것 같이.)가 자바 라이브러리인데 어노테이션은 제대로 코틀린에 적용되지 않았다. 그러나 지금은 지원함. 따라서 올해 중에 완전 변환 할 것.</li>
+<li>menu : Menu?는 Menu를 Optional 타입으로 할 때.</li>
+<li>자바와 달리 코틀린은 이중 상속을 허용한다. 이 때문에 슈퍼의 것을 사용할 때 어떤 것인지 명시해주어야 할 때가 있어 toKotlin이 완전하지 않은 경우가 있다. 이외에는 별 문제 없음.</li>
+<li>코틀린 표준 라이브러리에서 array, list 등 자바에서 기본적으로 제공하는 라이브러리를 따로 가지고 있다. 자바 기본은 너무 오래되었고(..!), map, reduce 등을 쓰기 위해 표준 라이브러리에 추가함. 그런데 이게 인터페이스만 있고 구현은 빠져있다.</li>
+<li>스칼라는 방대한 컬렉션 라이브러리를 가지고 있지만 코틀린은 가볍게 하기 위해 컴파일 시 필요한 파트만 구현을 제너레이트 해서 집어넣는 방식으로 가볍게 한다.</li>
+<li>그런데 안드로이드 킷캣 이후로는 cpu를 더 쓰더라도 메모리를 적게 쓰기 위해 컬렉션 라이브러리 구현을 통합했다(? 난 잘 모름..). 이게 코틀린에서 어떻게 될 지, 잘 예측할 수 없다. 안드의 최신 컬렉션 라이브러리가 성능이 더 좋은 거 아닐까? 재밌는 주제. 그런데 자료형 구현의 성능이 그렇게 아주 큰 차이는 나지 않을 것으로 예상됨.</li>
+<li>성능은 자바보다 약 5% 정도 떨어진다. 이 정도 차이는 최적화로 따라잡기 쉽지 않은 차이긴 하지만, 생산성 증가가 워낙 높고, 파이썬 등과 비교하면 대단히 성능이 높기 때문에 충분히 괜찮은 정도라고 생각한다.</li>
+<li>js로 변환 가능, js(canvas)도. DOM 셀렉터, 크리에이터 등 DOM 관련 기능이 표준라이브러리에 포함되어 있다.</li>
 </ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://hwiba.github.io/blog/2015/10/07/techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr/" data-id="cihvq145h000jgqfvn11xvc6l" class="article-share-link">Share</a>
+      <a data-url="http://hwiba.github.io/blog/2015/10/07/kotlin-세미나-필기/" data-id="cihx7m6k2001bxifvz0s82ik4" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/image/">image</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/세미나/">세미나</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/kotlin/">kotlin</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/세미나/">세미나</a></li></ul>
 
     </footer>
   </div>
@@ -165,7 +135,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/blog/page/12/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/11/">11</a><a class="page-number" href="/blog/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/blog/page/14/">14</a><a class="page-number" href="/blog/page/15/">15</a><a class="page-number" href="/blog/page/16/">16</a><a class="extend next" rel="next" href="/blog/page/14/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/blog/page/12/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/11/">11</a><a class="page-number" href="/blog/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/blog/page/14/">14</a><a class="page-number" href="/blog/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/17/">17</a><a class="extend next" rel="next" href="/blog/page/14/">Next &raquo;</a>
     </nav>
   
 </section>
@@ -178,7 +148,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">16</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Closure/">Closure</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Database/">Database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Lisp/">Lisp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/MySQL/">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Study/">Study</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/brew/">brew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/config/">config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/eclipse/">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/intellij/">intellij</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jspm/">jspm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/plugin/">plugin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/react/">react</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/spring-boot/">spring boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/uglifyjs/">uglifyjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Closure/">Closure</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Cloud/">Cloud</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Database/">Database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Lisp/">Lisp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/MySQL/">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Study/">Study</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/aws/">aws</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/brew/">brew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/config/">config</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/eclipse/">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/intellij/">intellij</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jspm/">jspm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/plugin/">plugin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/react/">react</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/spring-boot/">spring boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/uglifyjs/">uglifyjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -187,7 +157,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/blog/tags/Database/" style="font-size: 10px;">Database</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 14px;">Java 8</a> <a href="/blog/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/blog/tags/Lisp/" style="font-size: 10px;">Lisp</a> <a href="/blog/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog/tags/Study/" style="font-size: 10px;">Study</a> <a href="/blog/tags/brew/" style="font-size: 10px;">brew</a> <a href="/blog/tags/config/" style="font-size: 10px;">config</a> <a href="/blog/tags/eclipse/" style="font-size: 10px;">eclipse</a> <a href="/blog/tags/error/" style="font-size: 14px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/intellij/" style="font-size: 12px;">intellij</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/jspm/" style="font-size: 10px;">jspm</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/plugin/" style="font-size: 10px;">plugin</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/uglifyjs/" style="font-size: 10px;">uglifyjs</a> <a href="/blog/tags/세미나/" style="font-size: 18px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 14px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 16px;">프론트엔드</a>
+      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/blog/tags/Cloud/" style="font-size: 10px;">Cloud</a> <a href="/blog/tags/Database/" style="font-size: 10px;">Database</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 14px;">Java 8</a> <a href="/blog/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/blog/tags/Lisp/" style="font-size: 10px;">Lisp</a> <a href="/blog/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog/tags/Study/" style="font-size: 10px;">Study</a> <a href="/blog/tags/aws/" style="font-size: 10px;">aws</a> <a href="/blog/tags/brew/" style="font-size: 10px;">brew</a> <a href="/blog/tags/config/" style="font-size: 12px;">config</a> <a href="/blog/tags/eclipse/" style="font-size: 10px;">eclipse</a> <a href="/blog/tags/error/" style="font-size: 14px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/intellij/" style="font-size: 12px;">intellij</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/jspm/" style="font-size: 10px;">jspm</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/plugin/" style="font-size: 10px;">plugin</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/uglifyjs/" style="font-size: 10px;">uglifyjs</a> <a href="/blog/tags/세미나/" style="font-size: 18px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 14px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 16px;">프론트엔드</a>
     </div>
   </div>
 
@@ -196,7 +166,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/11/">November 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/12/">December 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/11/">November 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -206,6 +176,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog/2015/12/08/next-aws-세미나-후기/">next aws 세미나 후기</a>
+          </li>
         
           <li>
             <a href="/blog/2015/12/07/Closure-Study-0/">Closure Study (0)</a>
@@ -221,10 +195,6 @@
         
           <li>
             <a href="/blog/2015/11/04/Error-scalac-Multiple-scala-library-jar/">Error:scalac: Multiple &#39;scala-library*.jar&#39;</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2015/11/01/jspm-react-uglifyjs로-front-end-환경-세팅하기/">jspm, react, uglifyjs로 front end 환경 세팅하기</a>
           </li>
         
       </ul>

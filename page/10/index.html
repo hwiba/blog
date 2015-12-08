@@ -61,10 +61,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-Java-7-null-check-하기" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Next-웹-프론트엔드-세미나-그거-좀-쓰면-더-좋냐" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2015/10/15/Java-7-null-check-하기/" class="article-date">
-  <time datetime="2015-10-15T09:24:59.000Z" itemprop="datePublished">2015-10-15</time>
+    <a href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-그거-좀-쓰면-더-좋냐/" class="article-date">
+  <time datetime="2015-10-15T10:35:50.000Z" itemprop="datePublished">2015-10-15</time>
 </a>
     
   </div>
@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2015/10/15/Java-7-null-check-하기/">Java 7, null check 하기</a>
+      <a class="article-title" href="/blog/2015/10/15/Next-웹-프론트엔드-세미나-그거-좀-쓰면-더-좋냐/">Next 웹 프론트엔드 세미나, 그거 좀 쓰면 더 좋냐?</a>
     </h1>
   
 
@@ -83,26 +83,72 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Java 7에서 추가된 <code>Objects</code>의 <code>requireNonNull(T t)</code> 메서드는 파라미터의 null 체크를 위한 메서드로 null을 어떻게든 해보려는 목적에서 Java 8의 Optional과 비슷한 면이 있지만 그 처리는 상당한 차이가 있다. 이번 post에선 <code>requireNonNull</code>에 대해 다룬다.</p>
-<p>메서드에서 null일 가능성이 있는 인자가 있을 때, 이를 메서드 시작 지점에서 체크하여 Exception을 던지고자 하는 경우 다음과 비슷한 코드를 종종 볼 수 있다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nullableParameterMethod</span> <span class="params">(Object object)</span> <span class="keyword">throws</span> NullPointerException </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> ( <span class="keyword">null</span> == object ) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">  &#125;</span><br><span class="line">  System.out.println(String.valueOf(object));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>잘 동작할 것처럼 보이는데 이것에서 더 개선할 점이 있을까? <code>Objects.requireNonNull</code>은 이 코드를 더 편하게 사용하는 것을 목표로 한다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nullableParameterMethod2</span> <span class="params">(Object object)</span> </span>&#123;</span><br><span class="line">  object = Objects.requireNonNull(object);</span><br><span class="line">  System.out.println(String.valueOf(object));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>Objects.requireNonNull(T t)</code>은 인자 t가 null이 아니면 인자 t를 리턴하고 null이라면 내부에서 NullPointerException을 호출하는 메서드다. 이 정도로는 뭐가 개선된 건지 알기 어렵다. 코드가 아주 약간 줄어들기는 했지만 그게 그렇게 중요할까? 물론 의미는 있다. 메서드를 이해하고 있다면 가독성의 증가라고 생각해볼 수 있을 것이다. 그리 썩 대단해보이지는 않지만 null 체크만이 아니라 다양한 상태 체크가 있다면 좀 도움이 되지 않을까?</p>
-<p>같은 이름의 <code>Objects.requireNonNull(T t, String message)</code> 메서드는 예외 상황에 대해 메시지를 추가해준다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nullableParameterMethod3</span> <span class="params">(Object object)</span> </span>&#123;</span><br><span class="line">  object = Objects.requireNonNull(object, <span class="string">"object가 null입니다."</span>);</span><br><span class="line">  System.out.println(String.valueOf(object));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>여기까지도 뭐 그냥저냥인 것 같다. 그런데 Java 8에 오면서 lambda 식이 생김으로서 하나의 메서드가 더 생겼다. <code>Objects.requireNonNull(T t, Supplier&lt;String&gt; messageSupplier)</code>다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nullableParameterMethod4</span> <span class="params">(Object object)</span> </span>&#123;</span><br><span class="line">  object = Objects.requireNonNull(object, () -&gt; <span class="string">"object가 null입니다."</span>);</span><br><span class="line">  System.out.println(String.valueOf(object));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>Supplier&lt;T&gt;</code>는 無인자 單 리턴의 Functional Interface로서 매우 Lazy 하고 싶을 때 쓰기 좋다. return이 String이기만 하다면 그 안에서 여러가지를 할 수 있으므로 검사 대상인 객체가 null일 때 Exception을 던지는 것 말고도 여러가지 작업을 추가할 수 있을 것이다. 그런데 여전히 <code>if (null == object) {...}</code>에 비해 아주 대단해 보이지는 않는다. 좀 나은 정도? 불필요한 코드 라인 수를 줄이는데 도움이 될 것이다.</p>
-<p>다음 post에서는 <code>Optional&lt;T&gt;</code>에 대해 알아볼 것이다.</p>
+        <p>스피커 : SK planet 윤지수 마스터</p>
+<ul>
+<li>React, Flux, Gulp, ES6로 트렌디한 이야기를 해보겠다.</li>
+<li>이것들이 정말 필요한가? 필요한 시기인가? 이것에 대해 이야기 해보겠다.</li>
+<li>안써도 될 텐데… 이것들의 가치가 뭘까?</li>
+</ul>
+<h1 id="ES6">ES6</h1><ul>
+<li>새로운 feature와 syntax를 다룰 것.</li>
+<li>주요 feature<ul>
+<li>arrows : var pairs = evens.map(v =&gt; ({even :…)) <strong>왠 화살표냐..</strong></li>
+<li>let : C와 같이 block scope로 선언. <strong>굳이 필요한가..?</strong></li>
+<li>classes : java 프렌들리한 키워드들. class, extends, constructor, super, get 등.. <strong>function constructor &amp; prototype, typescript 정도..?</strong></li>
+<li>module : export, import <strong>requireJs &amp; browserify &amp; webpack</strong></li>
+<li>modules loader : System.import().then(function(m) { … } <strong>system.js</strong></li>
+<li>Promises : .then 으로 이어가서 콜백을 잇도록.. <strong>브라우저에서는 견딜만한 중첩콜백, promise 라이브러리가 따로 있기도 하고.. 브라우저에서는 굳이 많이 쓸까..? node에서 음.</strong></li>
+<li>yield, <em> : function</em> generator(i) { yield i + 1l yield* anotherGenerator(i); }, 이것은 함수 내부에서 멈추고 외부에서 실행을 제어할 수 있다. <strong>oh..? 브라우저에서 애니메이션을 제어할만할 것 같은데…</strong></li>
+</ul>
+</li>
+<li>ES 6는 웹의 혁신이 아니라 자연스러운 진화라고 본다.</li>
+<li>BABEL 등 transpiler는 ES6 -&gt; ES5로 변환하는 역할을 수행하므로 대부분의 브라우저에서 호환될 수 있다.<ul>
+<li>Babel 은 가벼운 웹 애플리케이션에서는 필요 없다. transpiler는 비교적 무거울 수 있다.</li>
+<li>classes, module, mouler loader 등이 필요한 무거운 웹 앱일 때 ES6를 사용하여 개발할 때 매력이 있다.</li>
+</ul>
+</li>
+</ul>
+<h1 id="React">React</h1><ul>
+<li>view에 집중하는 framework</li>
+<li>UI 개발은 무엇인가? 결국 View 개발이다. jsp, thymeleaf 등 결국 뷰를 조작하기 위함이다. 그런데 왜 UI 개발에 MVC가 필요한가? data가 중요하다보니 Model이 의미를 가지게 되었고, Controller로 View와 Model을 이어주는 역할이 덩달아 필요해졌다.</li>
+<li>그러니까 data의 유지가 필요 없다면, 프레임워크를 쓸 필요가 없다. 이들은 무겁고 느리다. 신중하게 판단해야한다.</li>
+<li>싱글 페이지 웹앱을 만들어 웹을 앱처럼 만들려다보니 네트워크가 끊겨도 동작, 캐시, 브라우저 메모리 등 여러 요구가 있었고 그래서 프론트의 MVC 프레임워크가 있는데….</li>
+<li><strong>React</strong>는 View에만 집중한다.</li>
+<li>virtual DOM 방식으로 DOM 조작 성능이 우수하다. <strong>react diif algorithm</strong></li>
+<li>더 이상 DOM 조작에 집중하지 말라. 이게 렌더링 성능을 악화시킨다. jQuery는 DOM API를 추상화해서 개발 절차를 편리하게 하지만, DOM 조작 자체에 집중하지 않는 시대로 가고 있다. 그래서 jQuery의 시대에 한 걸음 더 가까이 가고 있다.</li>
+<li>결국 트렌드는 jQuery와 같이 full package js library를 활용하는 추세에서, 언제든 제거할 수 있는 지금 당장 필요한 작은 polyfill과 utillity 라이브러리 활용으로 변화하고 있다.</li>
+</ul>
+<h2 id="flux">flux</h2><ul>
+<li>react를 쓰는데 data가 필요해지면….? 결국 Model(store)이 필요해졌다. </li>
+<li>데이터 흐름을 단방향으로 처리. <strong>uni-directional data flow</strong> 이는 각 레이어가 서로 간의 참조하는 것을 단방향으로 만든다.</li>
+</ul>
+<h2 id="react의_의미_있는_장점-">react의 의미 있는 장점.</h2><ul>
+<li>google은 자기들이 만들어 놓고 잘 안쓴다.. 하지만 facebook은 React를 쓴다.</li>
+<li>SPA(싱글 페이지 웹 앱)만을 위한 것이 아니다.</li>
+<li>vanillaJS(순수 자바스크립트) 방식과의 조화가 가능하다.</li>
+<li>Isomorphic JavaScript</li>
+</ul>
+<h1 id="직접_M,V,C_아키텍쳐를_디자인하고_라이브러리를_만들면_안될까?">직접 M,V,C 아키텍쳐를 디자인하고 라이브러리를 만들면 안될까?</h1><ul>
+<li>View의 의존성을 끊고 모듈화를 하자. View 간의 관계를 끊는게 몹시 중요하다.</li>
+<li>팀 내 개발자 간의 지식 공유가 안되면 유지하기 어려울 수 있다.</li>
+<li>flux와 같은 framework가 필요할까? SPA 수준의 웹앱이 필요하면 서라. 그렇지 않다면 굳이 쓰지 마라.</li>
+<li>pre-compile, js 통합, 품질 확인을 해야한다.</li>
+</ul>
+<h1 id="결론">결론</h1><p>가치를 판단해서 결정하라.</p>
+<h2 id="질답">질답</h2><ul>
+<li>sk에서는 아직 나온 것은 없고 만드는 중..</li>
+<li>naver에서는 웍스에서 곧 나올 예정.</li>
+<li>구글의 폴리머는 재사용의 장점이 있고, 프론트의 개발을 쉽게 할 수 있으며, react와 비슷한 면도 있고 표준이 될 가능성이 더 높은 경향이 있지만… 당장은 쓸 수가 없다. 먼 미래의 이야기. 애플이 받아들일까..? 요즘 이야기가 좀 나오는 듯. 같은 프로젝트 내에서 재사용이 좋다.</li>
+<li>JSX를 안써도 좋다.</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://hwiba.github.io/blog/2015/10/15/Java-7-null-check-하기/" data-id="cihvq147r002qgqfveo8z53o9" class="article-share-link">Share</a>
+      <a data-url="http://hwiba.github.io/blog/2015/10/15/Next-웹-프론트엔드-세미나-그거-좀-쓰면-더-좋냐/" data-id="cihx7m6lb002mxifve72z9z1d" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Java-7/">Java 7</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Java-8/">Java 8</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/세미나/">세미나</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/웹/">웹</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a></li></ul>
 
     </footer>
   </div>
@@ -113,7 +159,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/blog/page/9/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/8/">8</a><a class="page-number" href="/blog/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/blog/page/11/">11</a><a class="page-number" href="/blog/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/16/">16</a><a class="extend next" rel="next" href="/blog/page/11/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/blog/page/9/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/8/">8</a><a class="page-number" href="/blog/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/blog/page/11/">11</a><a class="page-number" href="/blog/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/17/">17</a><a class="extend next" rel="next" href="/blog/page/11/">Next &raquo;</a>
     </nav>
   
 </section>
@@ -126,7 +172,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">16</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Closure/">Closure</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Database/">Database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Lisp/">Lisp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/MySQL/">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Study/">Study</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/brew/">brew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/config/">config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/eclipse/">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/intellij/">intellij</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jspm/">jspm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/plugin/">plugin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/react/">react</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/spring-boot/">spring boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/uglifyjs/">uglifyjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Closure/">Closure</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Cloud/">Cloud</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Database/">Database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Lisp/">Lisp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/MySQL/">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Study/">Study</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/aws/">aws</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/brew/">brew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/config/">config</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/eclipse/">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/intellij/">intellij</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jspm/">jspm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/plugin/">plugin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/react/">react</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/spring-boot/">spring boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/uglifyjs/">uglifyjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -135,7 +181,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/blog/tags/Database/" style="font-size: 10px;">Database</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 14px;">Java 8</a> <a href="/blog/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/blog/tags/Lisp/" style="font-size: 10px;">Lisp</a> <a href="/blog/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog/tags/Study/" style="font-size: 10px;">Study</a> <a href="/blog/tags/brew/" style="font-size: 10px;">brew</a> <a href="/blog/tags/config/" style="font-size: 10px;">config</a> <a href="/blog/tags/eclipse/" style="font-size: 10px;">eclipse</a> <a href="/blog/tags/error/" style="font-size: 14px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/intellij/" style="font-size: 12px;">intellij</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/jspm/" style="font-size: 10px;">jspm</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/plugin/" style="font-size: 10px;">plugin</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/uglifyjs/" style="font-size: 10px;">uglifyjs</a> <a href="/blog/tags/세미나/" style="font-size: 18px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 14px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 16px;">프론트엔드</a>
+      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/blog/tags/Cloud/" style="font-size: 10px;">Cloud</a> <a href="/blog/tags/Database/" style="font-size: 10px;">Database</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 14px;">Java 8</a> <a href="/blog/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/blog/tags/Lisp/" style="font-size: 10px;">Lisp</a> <a href="/blog/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog/tags/Study/" style="font-size: 10px;">Study</a> <a href="/blog/tags/aws/" style="font-size: 10px;">aws</a> <a href="/blog/tags/brew/" style="font-size: 10px;">brew</a> <a href="/blog/tags/config/" style="font-size: 12px;">config</a> <a href="/blog/tags/eclipse/" style="font-size: 10px;">eclipse</a> <a href="/blog/tags/error/" style="font-size: 14px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/intellij/" style="font-size: 12px;">intellij</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/jspm/" style="font-size: 10px;">jspm</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/plugin/" style="font-size: 10px;">plugin</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/uglifyjs/" style="font-size: 10px;">uglifyjs</a> <a href="/blog/tags/세미나/" style="font-size: 18px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 14px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 16px;">프론트엔드</a>
     </div>
   </div>
 
@@ -144,7 +190,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/11/">November 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/12/">December 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/11/">November 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -154,6 +200,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog/2015/12/08/next-aws-세미나-후기/">next aws 세미나 후기</a>
+          </li>
         
           <li>
             <a href="/blog/2015/12/07/Closure-Study-0/">Closure Study (0)</a>
@@ -169,10 +219,6 @@
         
           <li>
             <a href="/blog/2015/11/04/Error-scalac-Multiple-scala-library-jar/">Error:scalac: Multiple &#39;scala-library*.jar&#39;</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2015/11/01/jspm-react-uglifyjs로-front-end-환경-세팅하기/">jspm, react, uglifyjs로 front end 환경 세팅하기</a>
           </li>
         
       </ul>

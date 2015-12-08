@@ -61,10 +61,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-java-8-stream-collect" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/blog/2015/09/26/java-8-stream-collect/" class="article-date">
-  <time datetime="2015-09-26T06:19:23.000Z" itemprop="datePublished">2015-09-26</time>
+    <a href="/blog/2015/10/07/techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr/" class="article-date">
+  <time datetime="2015-10-07T13:29:30.000Z" itemprop="datePublished">2015-10-07</time>
 </a>
     
   </div>
@@ -75,7 +75,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/blog/2015/09/26/java-8-stream-collect/">java 8, stream collect</a>
+      <a class="article-title" href="/blog/2015/10/07/techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr/">techPlanet2015 필기 : Fast and Beautiful: Serving High Quality Photos at Scale on Flickr</a>
     </h1>
   
 
@@ -83,41 +83,78 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>JAVA 8에서 추가된 stream API를 사용할 때, stream으로 넘어가기 이전의 collection에서 stream 내의 작업이 완료된 새 collection을 얻기를 원해서 하는 경우가 있다. reduce() 계열에 비해 오히려 이쪽이 더 자주 쓰이지 않을까? 나는 더 자주 쓴다.</p>
-<p>이럴 때는 collect() 메서드가 유용하다.</p>
-<h2 id="기본_용법">기본 용법</h2><p>용례는 다음과 같다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;Object&gt; result = objectList.stream().collect(ArrayList::<span class="keyword">new</span>, ArrayList::add, ArrayList::addAll);</span><br></pre></td></tr></table></figure>
-<p>이 예제의 인자들을 타입으로 보면 이렇다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objectList.stream().collect(Supplier&lt;R&gt; supplier, BiConsumer&lt;R, ? <span class="keyword">super</span> Object&gt; accumulator, BiConsumer&lt;R, R&gt; combiner);</span><br></pre></td></tr></table></figure>
-<p>여기에서 supplier란 어떤 collection의 생성자 레퍼런스이며, accumulator란 대상에 어떤 요소를 추가하는 function이고, combiner는 어떤 collection 2개를 병합하는 function임을 알 수 있다.</p>
-<p>당연하지만 supplier, accumulator, combiner를 일일이 입력하는 것은 몹시 귀찮은 일이다. 이때 쓸 수 있는 <code>Collectors.class</code>가 있다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Object&gt; resultList = objectList.stream().collect(Collectors.toList());</span><br><span class="line"></span><br><span class="line">Set&lt;Object&gt; resultSet = objectList.stream().collect(Collectors.toSet());</span><br></pre></td></tr></table></figure>
-<p>그런데 이 List와 Set은 구체적으로 어떤 구현체로 되어있을까? 명시적으로 핸들링하고 싶다면 <code>Collectors.toCollection(supplier)</code>를 사용할 수 있다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;Object&gt; resultArrayList = objectList.stream().collect(Collectors.toCollection(ArrayList::<span class="keyword">new</span>));</span><br></pre></td></tr></table></figure>
-<h2 id="joining">joining</h2><p><code>collect()</code>는 그 외에도 용도가 다양한 편인데, stream이 String 객체만을 대상으로 하고 있다면 <code>Collectors.joining()</code>을 사용해 String을 결합할 수도 있다. 결합되는 String 사이에 무언가 다른 String을 끼워넣고 싶다면 <code>.joining(&quot;String&quot;)</code>을 사용한다.</p>
-<h2 id="summary">summary</h2><p>그 외에도 int, double, long 객체를 가진 collection을 대상으로 단번에 sum, avg, max, min 값을 원할 때도 <code>collect</code>가 유용할 수 있다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//IntSummaryStatistics, Collectors.summarizingInt 외에 DoubleSummaryStatistics 등이 있다.</span></span><br><span class="line">ToIntFunction&lt;Integer&gt; mapper = i -&gt; i * <span class="number">2</span>;</span><br><span class="line">IntSummaryStatistics intSumAvgMaxMin  = Arrays.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>).stream().collect(Collectors.summarizingInt(mapper));</span><br><span class="line"><span class="keyword">double</span> avg = intSumAvgMaxMin.getAverage();</span><br><span class="line"><span class="keyword">double</span> sum = intSumAvgMaxMin.getSum();</span><br><span class="line"><span class="comment">//.... 기타 등</span></span><br></pre></td></tr></table></figure>
-<h2 id="toMap">toMap</h2><p><code>collect(Collectors.toMap())</code>의 경우는 조금 더 복잡하다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// key&amp;value</span></span><br><span class="line">groupRepository.findAll().stream().collect(Collectors.toMap(Group::getId, Group::getAdmin));</span><br><span class="line"></span><br><span class="line"><span class="comment">// value가 요소 자신인 경우 i -&gt; i, 즉 identity()이므로 다음 둘은 동일하다.</span></span><br><span class="line">groupRepository.findAll().stream().collect(Collectors.toMap(Group::getId, i -&gt; i));</span><br><span class="line">groupRepository.findAll().stream().collect(Collectors.toMap(Group::getId, Function.identity()));</span><br><span class="line"></span><br><span class="line"><span class="comment">// key가 같은 케이스가 복수일 때는 .toMap()에 3번째 parameter를 던져서 해결한다.</span></span><br><span class="line"><span class="comment">// 3번째 인자는 BinaryOperator&lt;U&gt; mergeFunction이다.</span></span><br><span class="line"><span class="comment">// 즉 타입이 같은 둘을 받아서 합치던 둘 중 하나를 골라내던 같은 타입 하나를 return한다.</span></span><br><span class="line"><span class="comment">// 이외에 exception을 날릴 수도 있다.</span></span><br><span class="line">groupRepository.findAll().stream().collect(Collectors.toMap(Group::getAdminId</span><br><span class="line">    , i -&gt; i</span><br><span class="line">    , (oldGroup, newGroup) -&gt; newGroup ));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Map의 구현체를 선택하고 싶다면 4번 째 인자로 생성자 레퍼런스를 던진다.</span></span><br><span class="line">groupRepository.findAll().stream().collect(Collectors.toMap(Group::getAdminId</span><br><span class="line">    , i -&gt; i</span><br><span class="line">    , (oldGroup, newGroup) -&gt; newGroup</span><br><span class="line">    , HashMap::<span class="keyword">new</span> ));</span><br></pre></td></tr></table></figure>
-<h2 id="groupingBy와_partitioningBy">groupingBy와 partitioningBy</h2><p>Collectors.toMap의 3번 째 parameter로 동일한 key를 가진 복수개의 요소를 처리할 수 있지만, collection에서 중복된 요소들을 모아 group을 만들기 위해서 map을 만드려고 하는 요구를 달성하기에는 좀 귀찮아진다. 때문에 이 작업을 위한 메서드가 별도로 있다. <code>groupingBy</code>와 <code>partitioningBy</code>가 그것이다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String name, <span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span>  <span class="title">isAdult</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.age &gt; <span class="number">18</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">List&lt;Person&gt; people = <span class="keyword">new</span> ArrayList&lt;Person&gt;();</span><br><span class="line">people.add(<span class="keyword">new</span> Person(<span class="string">"Hyva"</span>, <span class="number">19</span>));</span><br><span class="line">people.add(<span class="keyword">new</span> Person(<span class="string">"Javajigi"</span>, <span class="number">43</span>));</span><br><span class="line">people.add(<span class="keyword">new</span> Person(<span class="string">"Javajigi"</span>, <span class="number">16</span>));</span><br><span class="line">people.add(<span class="keyword">new</span> Person(<span class="string">"Ybin"</span>, <span class="number">16</span>));</span><br><span class="line">people.add(<span class="keyword">new</span> Person(<span class="string">"Das"</span>, <span class="number">18</span>));</span><br><span class="line">people.add(<span class="keyword">new</span> Person(<span class="string">"Das"</span>, <span class="number">27</span>));</span><br></pre></td></tr></table></figure>
-<p>이제 Person의 name으로 grouping 해보자. nameGroup은 Person::getName으로 분류된 그룹이므로 이름이 같인 Person을 묶어 List를 만들고, 그 이름을 Key로 하여 Map에 넣는다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, List&lt;Person&gt;&gt; nameGroup = people.stream().collect(Collectors.groupingBy(Person::getName));</span><br><span class="line"></span><br><span class="line"><span class="comment">// grouping을 하고 싶다면 groupingBy 대신 groupingByConcurrent를 쓸 수 있다.</span></span><br><span class="line">Map&lt;String, List&lt;Person&gt;&gt; nameGroup2 = people.parallelStream().collect(Collectors.groupingByConcurrent(Person::getName));</span><br></pre></td></tr></table></figure>
-<p>위의 Person::getName처럼 분류 목적으로 사용한 function을  classfier function이라고 한다. classfier function이 <code>T t -&gt; boolean</code>라면, 즉 <code>Predicate&lt;T&gt;</code>라면 groupingBy 대신 partitioningBy를 쓸 수 있다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Boolean, List&lt;Person&gt;&gt; generationGroup = people.stream().collect(Collectors.partitioningBy(Person::isAdult));</span><br><span class="line">List&lt;Person&gt; adultGroup = generationGroup.get(<span class="keyword">true</span>);</span><br><span class="line">List&lt;Person&gt; kidsGroup = generationGroup.get(<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
-<h2 id="Downstream_collector">Downstream collector</h2><p>예제처럼 groupingBy나 partitioningBy를 그냥 쓰면 Map의 value는 List다. 개발을 하다보면 단순히 count만 필요하거나, Set인 것이 편할 때가 있다. <code>downstream</code>을 던져넣어 List가 아닌 다른 value를 가진 Map을 얻을 수 있다.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//타입으로 보면 이렇다.</span></span><br><span class="line">Collectors.groupingBy(Function&lt;? <span class="keyword">super</span> T,? extends K&gt; classifier, Collector&lt;? <span class="keyword">super</span> T,A,D&gt; downstream);</span><br><span class="line"></span><br><span class="line"><span class="comment">// key가 같은 value가 몇 개인지 count만 얻기</span></span><br><span class="line">Map&lt;String, Set&lt;Person&gt;&gt; nameGroupCount = people.stream().collect(Collectors.groupingBy(Person::getName, Collectors.counting()));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 집합으로 얻기</span></span><br><span class="line">Map&lt;String, Set&lt;Person&gt;&gt; nameGroupSet = people.stream().collect(Collectors.groupingBy(Person::getName, Collectors.toSet()));</span><br></pre></td></tr></table></figure>
-<p><code>summingInt</code>, <code>summarizingInt</code>, <code>mapping</code>, <code>maxBy</code>, <code>minBy</code>, <code>reducing</code> 등 여러가지를 쓸 수 있으므로 적절히 사용하면 편리해지지만, depth가 너무 깊어지지 않게 주의하자. 하려고 하면 아주 복잡해질 수 있는 부분이다.</p>
-<p>이외에도<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Collectors <span class="title">groupingBy</span><span class="params">(Function&lt;? <span class="keyword">super</span> T,? extends K&gt; classifier, Supplier&lt;M&gt; mapFactory, Collector&lt;? <span class="keyword">super</span> T,A,D&gt; downstream)</span></span></span><br></pre></td></tr></table></figure></p>
-<p>의 형태로 mapFactory를 넣을 수도 있는데.. 충분히 길어졌으므로 이 포스팅은 여기서 끊자.</p>
+        <blockquote>
+<p>경고 : 이 문서는 오타수정을 포함해 정리를 하지 않은 필기로 잘못 들었거나 잘못 이해했거나 기타 등등 잘못된 내용이 얼마든지 많이 포함되어 있을 수 있습니다.</p>
+</blockquote>
+<p> 스피커 : Hugo Haas(flickr, yahoo)</p>
+<h2 id="what_does_beautiful_mean?">what does beautiful mean?</h2><ul>
+<li>다양한 디스플레이에서, 다양한 압축 기법으로 만든 사진을 여러 사진 작가들에게 보여주고 두 개의 사진을 두었을 때 둘이 같은가 다른가를 조사함.</li>
+</ul>
+<h2 id="what_does_fast_mean?">what does fast mean?</h2><ul>
+<li>어플리케이션을 빠르게 만들기 위해 하는 고민.</li>
+<li>스크린 렌더링이 얼마나 빠르게?</li>
+<li>스크롤 프레임은 얼마나?</li>
+<li>사진을 얼마나 빠르게 로딩?</li>
+<li>etc…</li>
+<li>유저 인터랙션에서 어떤 뎁스로?</li>
+</ul>
+<h2 id="challenges_:_designs_are_more_immersive">challenges : designs are more immersive</h2><pre><code>-<span class="ruby"> 과거 <span class="symbol">:</span> 작은 썸네일, 넓은 빈 공간.
+</span>-<span class="ruby"> 현재<span class="symbol">:</span> 큰 썸네일, 거의 남지 않는 빈 공간. 이는 가능한 스크린을 전체적으로 활용하여 서비스를 표현. 이를 위해 픽셀이 더 요구되었다. 실제 장비가 많이 발전했다.</span>
+</code></pre><h2 id="…but_bandwidth_is_very_disparate_and_not_as_high">…but bandwidth is very disparate and not as high</h2><p>Akamai 414 Asia mobile에 따르면, 픽셀의 증가와 비교하여 대역폭이 충분하지 않다. 적절히 대역폭이 발달하지 않고 있다. 그럼에도 불구하고 유저들의 요구사항은 증가하고 있다.</p>
+<h2 id="Instrument_all_the_layers">Instrument all the layers</h2><ul>
+<li>각 레이어들에 대해 이해하고 측정할 필요가 있다. 수집된 정보를 통해 분석한다.</li>
+<li>최악의 경우, 평균, 최고의 경우</li>
+<li>커넥션이 좋을 때, 나쁠 때.</li>
+<li>지리학적으로는 어떤지?</li>
+<li>다운로드 속도와 렌더링 속도</li>
+<li>처음 byte와 최후의 byte</li>
+<li>등… 여러가지 데이터로부터 통찰을 얻을 수 있다.</li>
+</ul>
+<h2 id="서버_사이드와_레이턴시">서버 사이드와 레이턴시</h2><ul>
+<li>최적화된 코드라도 디바이스의 변화 등으로 적절하지 않을 수 있다. 현재 빠른 코드인지 최대한 빨리 분석하고, 느려지는 곳이 있다면 개선한다.</li>
+<li>가령 미국에서 한국까지 오는데<ul>
+<li>ssl handshake</li>
+<li>http request  // 여기까지가 500+ ms 걸림.</li>
+<li>server side processing // 시간이 걸리긴 하지만 영향력이 적음.</li>
+<li>data transmission // 여기도 많이 느림. 가장 느림.</li>
+<li>이런 케이스에는 느리진 부분 이전을 개선해봐야 (15% 향상) 유저에게는 5% 미만의 체감을 느끼게 됨.</li>
+<li>바이트를 낮춰서 보내자는 계획.</li>
+<li>flickr는 진전을 보아서 절반의 크기(데이터 사이즈)로 같은 수준(유저를 대상으로 분석한)을 유지할 수 있음. </li>
+<li>그러나 이 압축에 많은 비용이 든다. 때문에 미리 S, M, L 사이즈로 미리 이미지를 압축해둔다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="the_importance_of_latency">the importance of latency</h2><ul>
+<li>과거 360kB를 전송할 때 3.7s 걸렸는데, 다음해 120kB를 보냈을 때 2.9s가 걸리는 걸 발견했다.</li>
+<li>이미지 데이터 사이즈를 줄이는게 의미가 있지만, 이것이 실제 속도에 미치는 영향은 일정한 정도에 수렴한다. 이는 latency 때문이다.</li>
+<li>이미지를 아무리 줄여야봐야 물리적인 거리에 의해 일정한 정도에서 한계가 발생한다. 따라서 물리적으로 실 사용자의 디바이스에 가까워질 필요가 있었다.</li>
+</ul>
+<h2 id="It’s_hard_to_replicate_15B_images_globally">It’s hard to replicate 15B images globally</h2><ul>
+<li>유저가 어느 지역의 인물이라고 해서 그의 관심사가 같은 지역에 묶일지 알 수 없다.</li>
+<li>Regional cache를 Image store와 유저 사이에 둠으로서 로드 타임을 줄일 수 있다.</li>
+</ul>
+<h2 id="더_개선할_수_있는가?">더 개선할 수 있는가?</h2><ul>
+<li>클라이언트에서 더 개선해야 한다. 기본적으로 치팅. 이는 예측을 의미.</li>
+<li>사진을 보여준 다음 무엇을 어떻게 할 것인가?</li>
+<li>앞, 뒤 이미지를 보여줄 것인가? 등</li>
+<li>유저의 다음 행동을 예상하고, 미리 예상되는 이미즈를 로딩함으로서 스마트한 클라이언트를 만든다.</li>
+<li>로컬 캐시를 활용하여 더 빠르게 한다.</li>
+<li>opportunistic prefetching</li>
+<li>이것들을 통해 50~70%를 개선할 수 있다.</li>
+<li>하지만 너무 aggressively하게 할 필요는 없다. 사용자들의 대역폭이 제한적인데 너무 많은 대역을 쓰거나, 등 사용자의 자원의 한계가 있으므로 싫어할 수 있다.</li>
+</ul>
+<h2 id="질문_답변-">질문 답변.</h2><ul>
+<li>해보지는 않았지만, 좀 더 영리하게 생각해볼 때, 이미지가 여러 사이즈가 있다. 이 중 썸네일로 쓴 작은 이미지를 먼저 보여주고 더 큰 이미지를 보여주는 순서로 사용한다면 유저가 더 빠르게 보이는 걸로 느낄 수 있을 것 같다.</li>
+<li>flickr에서 선호하는 포맷은? jpeg을 선호해왔으며, 더 큰 이미지를 써야할 때가 있었는데 다른 포맷들을 써보고 있지만 클라이언트의 지원 문제로 다시 jpeg으로 돌아가고는 한다.</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://hwiba.github.io/blog/2015/09/26/java-8-stream-collect/" data-id="cihvq146i001kgqfv2hvzo691" class="article-share-link">Share</a>
+      <a data-url="http://hwiba.github.io/blog/2015/10/07/techPlanet2015-필기-Fast-and-Beautiful-Serving-High-Quality-Photos-at-Scale-on-Flickr/" data-id="cihx7m6j5000jxifvv1ec7gz8" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/Java-8/">Java 8</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/stream/">stream</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/total/">.total</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/image/">image</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/blog/tags/세미나/">세미나</a></li></ul>
 
     </footer>
   </div>
@@ -128,7 +165,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/blog/page/13/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/12/">12</a><a class="page-number" href="/blog/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/blog/page/15/">15</a><a class="page-number" href="/blog/page/16/">16</a><a class="extend next" rel="next" href="/blog/page/15/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/blog/page/13/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/blog/page/12/">12</a><a class="page-number" href="/blog/page/13/">13</a><span class="page-number current">14</span><a class="page-number" href="/blog/page/15/">15</a><a class="page-number" href="/blog/page/16/">16</a><a class="page-number" href="/blog/page/17/">17</a><a class="extend next" rel="next" href="/blog/page/15/">Next &raquo;</a>
     </nav>
   
 </section>
@@ -141,7 +178,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">16</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Closure/">Closure</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Database/">Database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Lisp/">Lisp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/MySQL/">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Study/">Study</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/brew/">brew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/config/">config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/eclipse/">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/intellij/">intellij</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jspm/">jspm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/plugin/">plugin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/react/">react</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/spring-boot/">spring boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/uglifyjs/">uglifyjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">4</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/total/">.total</a><span class="tag-list-count">17</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/CI/">CI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Closure/">Closure</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Cloud/">Cloud</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Database/">Database</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-7/">Java 7</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Java-8/">Java 8</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Javascript/">Javascript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Lisp/">Lisp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/MySQL/">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/Study/">Study</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/aws/">aws</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/brew/">brew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/config/">config</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/eclipse/">eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/error/">error</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/functional-interface/">functional interface</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/github-page/">github page</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/image/">image</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/intellij/">intellij</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jenkins/">jenkins</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/jspm/">jspm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/kotlin/">kotlin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/plugin/">plugin</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/react/">react</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/spring-boot/">spring boot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/stream/">stream</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/type/">type</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/ubuntu/">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/uglifyjs/">uglifyjs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/세미나/">세미나</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/웹/">웹</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/blog/tags/프론트엔드/">프론트엔드</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -150,7 +187,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/blog/tags/Database/" style="font-size: 10px;">Database</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 14px;">Java 8</a> <a href="/blog/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/blog/tags/Lisp/" style="font-size: 10px;">Lisp</a> <a href="/blog/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog/tags/Study/" style="font-size: 10px;">Study</a> <a href="/blog/tags/brew/" style="font-size: 10px;">brew</a> <a href="/blog/tags/config/" style="font-size: 10px;">config</a> <a href="/blog/tags/eclipse/" style="font-size: 10px;">eclipse</a> <a href="/blog/tags/error/" style="font-size: 14px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/intellij/" style="font-size: 12px;">intellij</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/jspm/" style="font-size: 10px;">jspm</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/plugin/" style="font-size: 10px;">plugin</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/uglifyjs/" style="font-size: 10px;">uglifyjs</a> <a href="/blog/tags/세미나/" style="font-size: 18px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 14px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 16px;">프론트엔드</a>
+      <a href="/blog/tags/total/" style="font-size: 20px;">.total</a> <a href="/blog/tags/CI/" style="font-size: 10px;">CI</a> <a href="/blog/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/blog/tags/Cloud/" style="font-size: 10px;">Cloud</a> <a href="/blog/tags/Database/" style="font-size: 10px;">Database</a> <a href="/blog/tags/Java-7/" style="font-size: 10px;">Java 7</a> <a href="/blog/tags/Java-8/" style="font-size: 14px;">Java 8</a> <a href="/blog/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/blog/tags/Lisp/" style="font-size: 10px;">Lisp</a> <a href="/blog/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/blog/tags/Study/" style="font-size: 10px;">Study</a> <a href="/blog/tags/aws/" style="font-size: 10px;">aws</a> <a href="/blog/tags/brew/" style="font-size: 10px;">brew</a> <a href="/blog/tags/config/" style="font-size: 12px;">config</a> <a href="/blog/tags/eclipse/" style="font-size: 10px;">eclipse</a> <a href="/blog/tags/error/" style="font-size: 14px;">error</a> <a href="/blog/tags/functional-interface/" style="font-size: 10px;">functional interface</a> <a href="/blog/tags/git/" style="font-size: 10px;">git</a> <a href="/blog/tags/github-page/" style="font-size: 10px;">github page</a> <a href="/blog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/blog/tags/image/" style="font-size: 10px;">image</a> <a href="/blog/tags/intellij/" style="font-size: 12px;">intellij</a> <a href="/blog/tags/jenkins/" style="font-size: 10px;">jenkins</a> <a href="/blog/tags/jspm/" style="font-size: 10px;">jspm</a> <a href="/blog/tags/kotlin/" style="font-size: 10px;">kotlin</a> <a href="/blog/tags/plugin/" style="font-size: 10px;">plugin</a> <a href="/blog/tags/react/" style="font-size: 10px;">react</a> <a href="/blog/tags/scala/" style="font-size: 10px;">scala</a> <a href="/blog/tags/spring-boot/" style="font-size: 10px;">spring boot</a> <a href="/blog/tags/stream/" style="font-size: 10px;">stream</a> <a href="/blog/tags/type/" style="font-size: 10px;">type</a> <a href="/blog/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/blog/tags/uglifyjs/" style="font-size: 10px;">uglifyjs</a> <a href="/blog/tags/세미나/" style="font-size: 18px;">세미나</a> <a href="/blog/tags/웹/" style="font-size: 14px;">웹</a> <a href="/blog/tags/프론트엔드/" style="font-size: 16px;">프론트엔드</a>
     </div>
   </div>
 
@@ -159,7 +196,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/11/">November 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/12/">December 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/11/">November 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/10/">October 2015</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/blog/archives/2015/09/">September 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -169,6 +206,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/blog/2015/12/08/next-aws-세미나-후기/">next aws 세미나 후기</a>
+          </li>
         
           <li>
             <a href="/blog/2015/12/07/Closure-Study-0/">Closure Study (0)</a>
@@ -184,10 +225,6 @@
         
           <li>
             <a href="/blog/2015/11/04/Error-scalac-Multiple-scala-library-jar/">Error:scalac: Multiple &#39;scala-library*.jar&#39;</a>
-          </li>
-        
-          <li>
-            <a href="/blog/2015/11/01/jspm-react-uglifyjs로-front-end-환경-세팅하기/">jspm, react, uglifyjs로 front end 환경 세팅하기</a>
           </li>
         
       </ul>
